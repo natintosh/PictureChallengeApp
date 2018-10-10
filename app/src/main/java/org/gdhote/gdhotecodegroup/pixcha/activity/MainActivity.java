@@ -1,10 +1,14 @@
-package org.gdhote.gdhotecodegroup.pixcha;
+package org.gdhote.gdhotecodegroup.pixcha.activity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.gdhote.gdhotecodegroup.pixcha.fragment.FeedsFragment;
+import org.gdhote.gdhotecodegroup.pixcha.fragment.ProfileFragment;
+import org.gdhote.gdhotecodegroup.pixcha.R;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

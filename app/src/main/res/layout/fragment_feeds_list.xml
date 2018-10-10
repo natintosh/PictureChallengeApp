@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/feeds_list"
-    android:name="org.gdhote.gdhotecodegroup.pixcha.FeedsFragment"
+    android:name="org.gdhote.gdhotecodegroup.pixcha.fragment.FeedsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".FeedsFragment"
+    tools:context=".fragment.FeedsFragment"
     tools:listitem="@layout/fragment_feeds" />

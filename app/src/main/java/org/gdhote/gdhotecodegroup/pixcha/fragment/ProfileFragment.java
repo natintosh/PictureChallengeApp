@@ -1,4 +1,4 @@
-package org.gdhote.gdhotecodegroup.pixcha;
+package org.gdhote.gdhotecodegroup.pixcha.fragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.gdhote.gdhotecodegroup.pixcha.R;
 
 import androidx.fragment.app.Fragment;
 
