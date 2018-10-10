@@ -20,7 +20,7 @@ public class FeedsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_feeds_list,  container, false);
+        View view = getView() != null ? getView() : inflater.inflate(R.layout.fragment_feeds_list,  container, false);
 
         RecyclerView feedsRecyclerView = view.findViewById(R.id.feeds_list);
         FeedsListAdapter feedsListAdapter = new FeedsListAdapter();

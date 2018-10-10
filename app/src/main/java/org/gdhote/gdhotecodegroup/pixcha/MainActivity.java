@@ -15,33 +15,9 @@ import androidx.fragment.app.FragmentTransaction;
 public class MainActivity extends AppCompatActivity {
 
     FragmentManager mFragmentManager;
-    FeedsFragment mFeedsFragment;
-    ProfileFragment mProfileFragment;
-    private BottomNavigationView.OnNavigationItemSelectedListener mNavigationItemSelectedListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                    int itemId = menuItem.getItemId();
-
-                    switch (itemId) {
-                        case R.id.nav_action_feeds:
-                            Toast.makeText(MainActivity.this, "Feeds", Toast.LENGTH_SHORT).show();
-                            mFeedsFragment = new FeedsFragment();
-                            loadFragment(mFeedsFragment);
-                            return true;
-                        case R.id.nav_action_camera:
-                            Toast.makeText(MainActivity.this, "Camera", Toast.LENGTH_SHORT).show();
-                            return true;
-                        case R.id.nav_action_profile:
-                            Toast.makeText(MainActivity.this, "Profile", Toast.LENGTH_SHORT).show();
-                            mProfileFragment = new ProfileFragment();
-                            loadFragment(mProfileFragment);
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
-            };
+    private final FeedsFragment mFeedsFragment = new FeedsFragment();
+    private final ProfileFragment mProfileFragment = new ProfileFragment();
+    Fragment activeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,21 +27,62 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_bar);
         bottomNavigationView.setOnNavigationItemSelectedListener(mNavigationItemSelectedListener);
 
-        mProfileFragment = new ProfileFragment();
-        mFeedsFragment = new FeedsFragment();
+        mFragmentManager = getSupportFragmentManager();
 
+        activeFragment = mFeedsFragment;
         loadFragment(mFeedsFragment);
+    }
 
+    @Override
+    public void onBackPressed() {
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count != 0) {
+            super.onBackPressed();
+            //additional code
+        } else {
+            getFragmentManager().popBackStack();
+        }
 
     }
 
     private void loadFragment(Fragment fragment) {
         // load fragment
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.replace(R.id.view_frame_layout, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mNavigationItemSelectedListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                    int itemId = menuItem.getItemId();
+
+                    switch (itemId) {
+                        case R.id.nav_action_feeds:
+                            if (activeFragment != mFeedsFragment) {
+                                Toast.makeText(MainActivity.this, "Feeds", Toast.LENGTH_SHORT).show();
+                                loadFragment(mFeedsFragment);
+                                activeFragment = mFeedsFragment;
+                            }
+                            return true;
+                        case R.id.nav_action_camera:
+                            Toast.makeText(MainActivity.this, "Camera", Toast.LENGTH_SHORT).show();
+                            return true;
+                        case R.id.nav_action_profile:
+                            if (activeFragment != mProfileFragment) {
+                                Toast.makeText(MainActivity.this, "Profile", Toast.LENGTH_SHORT).show();
+                                loadFragment(mProfileFragment);
+                                activeFragment = mProfileFragment;
+                            }
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            };
 
 
 }
