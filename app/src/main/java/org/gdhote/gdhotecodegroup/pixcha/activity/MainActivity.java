@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.gdhote.gdhotecodegroup.pixcha.fragment.ExitDialogFragment;
 import org.gdhote.gdhotecodegroup.pixcha.fragment.FeedsFragment;
 import org.gdhote.gdhotecodegroup.pixcha.fragment.ProfileFragment;
 import org.gdhote.gdhotecodegroup.pixcha.R;
@@ -39,15 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        int count = getFragmentManager().getBackStackEntryCount();
-
-        if (count != 0) {
-            super.onBackPressed();
-            //additional code
-        } else {
-            getFragmentManager().popBackStack();
-        }
-
+        ExitDialogFragment exitDialogFragment = ExitDialogFragment.newInstance();
+        exitDialogFragment.show(getSupportFragmentManager(), "exit_fragment_dialog");
     }
 
     private void loadFragment(Fragment fragment) {
@@ -67,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
                     switch (itemId) {
                         case R.id.nav_action_feeds:
                             if (activeFragment != mFeedsFragment) {
-                                Toast.makeText(MainActivity.this, "Feeds", Toast.LENGTH_SHORT).show();
                                 loadFragment(mFeedsFragment);
                                 activeFragment = mFeedsFragment;
                             }
@@ -77,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
                             return true;
                         case R.id.nav_action_profile:
                             if (activeFragment != mProfileFragment) {
-                                Toast.makeText(MainActivity.this, "Profile", Toast.LENGTH_SHORT).show();
                                 loadFragment(mProfileFragment);
                                 activeFragment = mProfileFragment;
                             }
