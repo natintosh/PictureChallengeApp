@@ -28,7 +28,7 @@ public class ProfileFragment extends Fragment {
         View view = getView() != null ? getView() : inflater.inflate(R.layout.fragment_profile, container, false);
 
 
-        mPagerAdapter = new ProfileViewPagerAdapter(getFragmentManager());
+        mPagerAdapter = new ProfileViewPagerAdapter(getChildFragmentManager());
         mProfileViewPager = view.findViewById(R.id.profile_view_pager);
         mProfileViewPager.setAdapter(mPagerAdapter);
         return view;

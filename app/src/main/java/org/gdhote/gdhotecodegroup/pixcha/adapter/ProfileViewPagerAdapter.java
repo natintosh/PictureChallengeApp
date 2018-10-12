@@ -10,8 +10,14 @@ import androidx.fragment.app.FragmentPagerAdapter;
 public class ProfileViewPagerAdapter extends FragmentPagerAdapter {
     private static final int NUM_PAGES = 2;
 
+    private final ProfileImageGridFragment profileImageGridFragment;
+
+    private final ProfileImageListFragment profileImageListFragment;
+
     public ProfileViewPagerAdapter(FragmentManager fm) {
         super(fm);
+        profileImageGridFragment = new ProfileImageGridFragment();
+        profileImageListFragment = new ProfileImageListFragment();
     }
 
     @Override
@@ -19,9 +25,9 @@ public class ProfileViewPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                return new ProfileImageGridFragment();
+                return profileImageGridFragment;
             case 1:
-                return new ProfileImageListFragment();
+                return profileImageListFragment;
             default:
                 return null;
         }
