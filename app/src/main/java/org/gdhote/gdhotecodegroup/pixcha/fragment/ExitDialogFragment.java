@@ -15,6 +15,9 @@ import androidx.annotation.Nullable;
 
 public class ExitDialogFragment extends BottomSheetDialogFragment {
 
+    public ExitDialogFragment() {
+        // Required empty public constructor
+    }
     public static ExitDialogFragment newInstance() {
         return  new ExitDialogFragment();
     }

@@ -6,28 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.gdhote.gdhotecodegroup.pixcha.R;
-import org.gdhote.gdhotecodegroup.pixcha.adapter.FeedsListAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
-public class FeedsFragment extends Fragment {
+public class ProfileImageGridFragment extends Fragment {
 
-    public FeedsFragment() {
+    public ProfileImageGridFragment() {
         // Required empty public constructor
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = getView() != null ? getView() : inflater.inflate(R.layout.fragment_feeds_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_image_grid, container, false);
 
-        RecyclerView feedsRecyclerView = view.findViewById(R.id.feeds_list);
-        FeedsListAdapter feedsListAdapter = new FeedsListAdapter();
-
-        feedsRecyclerView.setAdapter(feedsListAdapter);
         return view;
     }
 }
