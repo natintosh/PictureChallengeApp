@@ -106,6 +106,7 @@
             android:weightSum="1">
 
             <ImageButton
+                android:id="@+id/profile_grid_img_btn"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="40sp"
@@ -124,6 +125,7 @@
 
 
             <ImageButton
+                android:id="@+id/profile_list_img_btn"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="40sp"
