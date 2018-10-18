@@ -10,6 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ProfileGridAdapter extends RecyclerView.Adapter<ProfileGridAdapter.ProfileGridAdapterViewHolder> {
+
+    private final ListItemClickListener onClickListener;
+
+    public interface ListItemClickListener {
+        void onListItemClick(int position);
+
+        void onListItemLongClick(int position);
+    }
+
+    public ProfileGridAdapter(ListItemClickListener listItemClickListener) {
+        this.onClickListener = listItemClickListener;
+    }
+
     @NonNull
     @Override
     public ProfileGridAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -27,10 +40,25 @@ public class ProfileGridAdapter extends RecyclerView.Adapter<ProfileGridAdapter.
         return 10;
     }
 
-    public class ProfileGridAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class ProfileGridAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         public ProfileGridAdapterViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            onClickListener.onListItemClick(position);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            int position = getAdapterPosition();
+            onClickListener.onListItemLongClick(position);
+            return true;
         }
     }
 }

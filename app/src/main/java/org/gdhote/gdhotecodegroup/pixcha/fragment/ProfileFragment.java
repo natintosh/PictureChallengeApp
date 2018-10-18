@@ -22,7 +22,7 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private ViewPager mProfileViewPager;
+    private static ViewPager mProfileViewPager;
     private PagerAdapter mPagerAdapter;
 
     @Override
@@ -89,6 +89,10 @@ public class ProfileFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    public static ViewPager getProfileViewPager() {
+        return mProfileViewPager;
     }
 
 }
