@@ -1,83 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:padding="4dp">
-
-        <org.gdhote.gdhotecodegroup.pixcha.ui.CircularImageView
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/me"
-            tools:src="@tools:sample/avatars" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="4dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="oluwatobiloba" />
-    </LinearLayout>
-
-    <org.gdhote.gdhotecodegroup.pixcha.ui.SquareImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <org.gdhote.gdhotecodegroup.pixcha.ui.CircularImageView
+        android:id="@+id/feed_circular_profile_image"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:src="@drawable/me"
+        app:layout_constraintBottom_toTopOf="@+id/feed_square_content_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/backgrounds/scenic" />
+        tools:src="@tools:sample/avatars" />
 
     <TextView
+        android:id="@+id/feed_user_name_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="oluwatobiloba"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/feed_circular_profile_image"
+        app:layout_constraintStart_toEndOf="@+id/feed_circular_profile_image"
+        app:layout_constraintTop_toTopOf="@+id/feed_circular_profile_image" />
+
+    <org.gdhote.gdhotecodegroup.pixcha.ui.SquareImageView
+        android:id="@+id/feed_square_content_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:src="@drawable/me"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--tools:src="@tools:sample/backgrounds/scenic"-->
+
+    <TextView
+        android:id="@+id/feed_content_description_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:layout_marginTop="4dp"
         android:ellipsize="end"
         android:maxLines="3"
         android:padding="4dp"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/feed_square_content_image" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <CheckBox
+        android:id="@+id/feed_like_check_box"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:button="@drawable/ic_like_state"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/feed_content_description_text" />
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="2dp"
-            android:button="@drawable/ic_like_state" />
+    <TextView
+        android:id="@+id/feed_content_likes_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="12"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/feed_like_check_box"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/feed_like_check_box" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
-            android:ellipsize="end"
-            android:inputType="number"
-            android:maxLines="1"
-            android:text="12" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="2dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="likes" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/feed_text_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="likes"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/feed_content_likes_text"
+        app:layout_constraintStart_toEndOf="@+id/feed_content_likes_text"
+        app:layout_constraintTop_toTopOf="@+id/feed_content_likes_text" />
 
     <View
+        android:id="@+id/feed_content_seperator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:background="#dedede" />
-</LinearLayout>
+        android:layout_marginTop="8dp"
+        android:background="#dedede"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/feed_like_check_box" />
+</androidx.constraintlayout.widget.ConstraintLayout>

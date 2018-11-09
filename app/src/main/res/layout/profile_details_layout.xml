@@ -80,7 +80,7 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="20sp"
-                android:background="@drawable/rnd_btn_bg_white_state"
+                android:background="@drawable/rnd_crn_btn_bg_white_state"
                 android:text="Edit Profile"
                 android:textAllCaps="false"
                 android:textStyle="normal" />
