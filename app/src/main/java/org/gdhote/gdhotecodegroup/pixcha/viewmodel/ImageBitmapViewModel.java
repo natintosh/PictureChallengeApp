@@ -1,4 +1,4 @@
-package org.gdhote.gdhotecodegroup.pixcha.model;
+package org.gdhote.gdhotecodegroup.pixcha.viewmodel;
 
 import android.graphics.Bitmap;
 

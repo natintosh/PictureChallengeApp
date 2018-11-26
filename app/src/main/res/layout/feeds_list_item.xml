@@ -7,11 +7,10 @@
 
     <org.gdhote.gdhotecodegroup.pixcha.ui.CircularImageView
         android:id="@+id/feed_circular_profile_image"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:src="@drawable/me"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
         app:layout_constraintBottom_toTopOf="@+id/feed_square_content_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,11 +26,11 @@
         android:layout_marginLeft="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="oluwatobiloba"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/feed_circular_profile_image"
         app:layout_constraintStart_toEndOf="@+id/feed_circular_profile_image"
-        app:layout_constraintTop_toTopOf="@+id/feed_circular_profile_image" />
+        app:layout_constraintTop_toTopOf="@+id/feed_circular_profile_image"
+        tools:text="oluwatobiloba" />
 
     <org.gdhote.gdhotecodegroup.pixcha.ui.SquareImageView
         android:id="@+id/feed_square_content_image"
@@ -42,34 +41,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/backgrounds/scenic" />
 
-    <!--tools:src="@tools:sample/backgrounds/scenic"-->
 
     <TextView
-        android:id="@+id/feed_content_description_text"
-        android:layout_width="wrap_content"
+        android:id="@+id/feed_caption_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
         android:ellipsize="end"
         android:maxLines="3"
         android:padding="4dp"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-        android:textSize="13sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/feed_square_content_image" />
+        app:layout_constraintTop_toBottomOf="@+id/feed_like_check_box"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
 
     <CheckBox
         android:id="@+id/feed_like_check_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:button="@drawable/ic_like_state"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/feed_content_description_text" />
+        app:layout_constraintTop_toBottomOf="@+id/feed_square_content_image" />
 
     <TextView
         android:id="@+id/feed_content_likes_text"
@@ -77,11 +81,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:text="12"
-        android:textSize="14sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/feed_like_check_box"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/feed_like_check_box" />
+        app:layout_constraintTop_toTopOf="@+id/feed_like_check_box"
+        tools:text="0" />
 
     <TextView
         android:id="@+id/feed_text_like"
@@ -92,7 +96,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="likes"
-        android:textSize="14sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/feed_content_likes_text"
         app:layout_constraintStart_toEndOf="@+id/feed_content_likes_text"
         app:layout_constraintTop_toTopOf="@+id/feed_content_likes_text" />
@@ -101,9 +105,23 @@
         android:id="@+id/feed_content_seperator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:background="#dedede"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/feed_like_check_box" />
+        app:layout_constraintTop_toBottomOf="@+id/feed_uploaded_time_tv" />
+
+    <TextView
+        android:id="@+id/feed_uploaded_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/feed_caption_text"
+        tools:text="10 MINUTES AGO" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

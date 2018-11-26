@@ -2,6 +2,7 @@ package org.gdhote.gdhotecodegroup.pixcha.fragment;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,14 +10,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.gdhote.gdhotecodegroup.pixcha.R;
 import org.gdhote.gdhotecodegroup.pixcha.activity.CameraActivity;
-import org.gdhote.gdhotecodegroup.pixcha.model.ImageBitmapViewModel;
+import org.gdhote.gdhotecodegroup.pixcha.viewmodel.EditProfileViewModel;
+import org.gdhote.gdhotecodegroup.pixcha.viewmodel.ImageBitmapViewModel;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -25,13 +27,47 @@ import androidx.lifecycle.ViewModelProviders;
 public class CropImageFragment extends Fragment {
 
     public static final int DEGREES_OF_ROTATION = 90;
+    private static final String ARG_FRAGMENT_CASE = "param";
+    private static final String ARG_IMAGE_URI = "uri";
+    private int mFragmentCase;
+    private Uri mImageUri;
 
     public CropImageFragment() {
         // Required empty public constructor
     }
 
+    public static CropImageFragment newInstance(int param1, Uri uri) {
+        CropImageFragment fragment = new CropImageFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_FRAGMENT_CASE, param1);
+        args.putParcelable(ARG_IMAGE_URI, uri);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mFragmentCase = getArguments().getInt(ARG_FRAGMENT_CASE, 0);
+            mImageUri = getArguments().getParcelable(ARG_IMAGE_URI);
+        }
+        setHasOptionsMenu(true);
+    }
+
     private CropImageView cropImageView;
-    CameraFragment.OnUserInputListener mCallBack;
+    private CameraFragment.OnUserInputListener mCallBack;
+    private OnEditProfileCropListener mEditProfileCallback;
+
+    public interface OnEditProfileCropListener {
+        void onEditProfileCropButtonClick();
+    }
+
+    private void onEditProfileCropMenuSelected() {
+        if (mEditProfileCallback != null) {
+            mEditProfileCallback.onEditProfileCropButtonClick();
+        }
+    }
 
 
     @Override
@@ -39,16 +75,18 @@ public class CropImageFragment extends Fragment {
         super.onAttach(context);
 
         try {
-            mCallBack = (CameraFragment.OnUserInputListener) getActivity();
+            mCallBack = (CameraFragment.OnUserInputListener) context;
+            mEditProfileCallback = (OnEditProfileCropListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString() + " must implement OnUserInputListener");
         }
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+    public void onDetach() {
+        super.onDetach();
+        mCallBack = null;
+        mEditProfileCallback = null;
     }
 
     @Override
@@ -64,15 +102,18 @@ public class CropImageFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
-        ImageBitmapViewModel model = ViewModelProviders.of(getActivity()).get(ImageBitmapViewModel.class);
-        model.getOriginalBitmap().observe(getActivity(), new Observer<Bitmap>() {
-            @Override
-            public void onChanged(Bitmap bitmap) {
-                cropImageView.setImageBitmap(bitmap);
-            }
-        });
-
+        if (mFragmentCase == 0) {
+            ImageBitmapViewModel model = ViewModelProviders.of(getActivity()).get(ImageBitmapViewModel.class);
+            model.getOriginalBitmap().observe(getActivity(), new Observer<Bitmap>() {
+                @Override
+                public void onChanged(Bitmap bitmap) {
+                    cropImageView.setImageBitmap(bitmap);
+                }
+            });
+        }
+        if (mFragmentCase == 1) {
+            cropImageView.setImageUriAsync(mImageUri);
+        }
         return view;
     }
 
@@ -94,9 +135,16 @@ public class CropImageFragment extends Fragment {
             case R.id.crop_crop_image_menu:
                 Bitmap bitmap = cropImageView.getCroppedImage();
 
-                ImageBitmapViewModel imageBitmapViewModel = ViewModelProviders.of(getActivity()).get(ImageBitmapViewModel.class);
-                imageBitmapViewModel.setCroppedBitmap(bitmap);
-                mCallBack.onProceed(CameraActivity.FILTER_IMAGE_FRAGMENT_TRANSACTION_ID);
+                if (mFragmentCase == 0) {
+                    ImageBitmapViewModel imageBitmapViewModel = ViewModelProviders.of(getActivity()).get(ImageBitmapViewModel.class);
+                    imageBitmapViewModel.setCroppedBitmap(bitmap);
+                    mCallBack.onProceed(CameraActivity.FILTER_IMAGE_FRAGMENT_TRANSACTION_ID);
+                }
+                if (mFragmentCase == 1) {
+                    ViewModelProviders.of(getActivity()).get(EditProfileViewModel.class).setProfilePicture(bitmap);
+                    Toast.makeText(getContext(), ViewModelProviders.of(getActivity()).get(EditProfileViewModel.class).getDisplayName(), Toast.LENGTH_SHORT).show();
+                    onEditProfileCropMenuSelected();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

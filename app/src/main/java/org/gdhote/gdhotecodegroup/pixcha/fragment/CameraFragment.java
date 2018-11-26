@@ -24,7 +24,7 @@ import com.otaliastudios.cameraview.Flash;
 
 import org.gdhote.gdhotecodegroup.pixcha.R;
 import org.gdhote.gdhotecodegroup.pixcha.activity.CameraActivity;
-import org.gdhote.gdhotecodegroup.pixcha.model.ImageBitmapViewModel;
+import org.gdhote.gdhotecodegroup.pixcha.viewmodel.ImageBitmapViewModel;
 import org.gdhote.gdhotecodegroup.pixcha.utils.OnSwipeTouchListener;
 
 import java.io.IOException;
@@ -37,16 +37,13 @@ import androidx.lifecycle.ViewModelProviders;
 
 public class CameraFragment extends Fragment implements BSImagePicker.OnSingleImageSelectedListener {
 
-    public static final String PROVIDER_AUTHORITY = "org.gdhote.gdhotecodegroup.pixcha.fileprovider";
+    private static final String PROVIDER_AUTHORITY = "org.gdhote.gdhotecodegroup.pixcha.fileprovider";
 
-    OnUserInputListener mCallBack;
+    private OnUserInputListener mCallBack;
 
-    CameraView cameraView;
-    ConstraintLayout mContraintLayout;
-    ImageButton cameraShutterButton;
-    ImageButton cameraFlashSwitchButton;
-    ImageButton activeCameraSwitchButton;
-    ImageButton cameraSwipeUpButton;
+    private CameraView cameraView;
+    private ImageButton cameraFlashSwitchButton;
+    private ImageButton activeCameraSwitchButton;
 
     private static final Flash[] FLASH_OPTIONS = {
             Flash.OFF,
@@ -88,10 +85,16 @@ public class CameraFragment extends Fragment implements BSImagePicker.OnSingleIm
         super.onAttach(context);
 
         try {
-            mCallBack = (OnUserInputListener) getActivity();
+            mCallBack = (OnUserInputListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString() + " must implement OnUserInputListener");
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallBack = null;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -123,7 +126,7 @@ public class CameraFragment extends Fragment implements BSImagePicker.OnSingleIm
             }
         });
 
-        cameraShutterButton = view.findViewById(R.id.camera_shutter_btn);
+        ImageButton cameraShutterButton = view.findViewById(R.id.camera_shutter_btn);
         cameraShutterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +166,7 @@ public class CameraFragment extends Fragment implements BSImagePicker.OnSingleIm
                 .hideGalleryTile()
                 .build();
 
-        mContraintLayout = view.findViewById(R.id.controls_layout_block);
+        ConstraintLayout mContraintLayout = view.findViewById(R.id.controls_layout_block);
         mContraintLayout.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
             @Override
             public void onSwipeTop() {
@@ -172,7 +175,7 @@ public class CameraFragment extends Fragment implements BSImagePicker.OnSingleIm
         });
 
 
-        cameraSwipeUpButton = view.findViewById(R.id.camera_swipe_up_button);
+        ImageButton cameraSwipeUpButton = view.findViewById(R.id.camera_swipe_up_button);
         cameraSwipeUpButton.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
             @Override
             public void onSwipeTop() {

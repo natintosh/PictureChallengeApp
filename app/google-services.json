@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "191737695763",
+    "firebase_url": "https://pixcha-ca614.firebaseio.com",
+    "project_id": "pixcha-ca614",
+    "storage_bucket": "pixcha-ca614.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:191737695763:android:a5a91d70583cb40f",
+        "android_client_info": {
+          "package_name": "org.gdhote.gdhotecodegroup.pixcha"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "191737695763-qnbs1re70ftluqpg02rbi7c22k179m7v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.gdhote.gdhotecodegroup.pixcha",
+            "certificate_hash": "044fefa27ae58a691cefce503b07dcf24bfb2c08"
+          }
+        },
+        {
+          "client_id": "191737695763-1as91fo16b5gjjlrq0cdlopdi1vf96mc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6w6daCEh1ygIh6Ut09SaUEZ-nViOEVEI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "191737695763-1as91fo16b5gjjlrq0cdlopdi1vf96mc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

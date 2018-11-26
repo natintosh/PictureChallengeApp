@@ -6,7 +6,7 @@ import org.gdhote.gdhotecodegroup.pixcha.R;
 import org.gdhote.gdhotecodegroup.pixcha.fragment.CameraFragment;
 import org.gdhote.gdhotecodegroup.pixcha.fragment.CropImageFragment;
 import org.gdhote.gdhotecodegroup.pixcha.fragment.FilterImageFragment;
-import org.gdhote.gdhotecodegroup.pixcha.model.ImageBitmapViewModel;
+import org.gdhote.gdhotecodegroup.pixcha.viewmodel.ImageBitmapViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -14,7 +14,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
-public class CameraActivity extends AppCompatActivity implements CameraFragment.OnUserInputListener {
+public class CameraActivity extends AppCompatActivity implements CameraFragment.OnUserInputListener,
+    CropImageFragment.OnEditProfileCropListener{
 
     FragmentManager mFragmentManager;
 
@@ -73,5 +74,10 @@ public class CameraActivity extends AppCompatActivity implements CameraFragment.
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onEditProfileCropButtonClick() {
+
     }
 }

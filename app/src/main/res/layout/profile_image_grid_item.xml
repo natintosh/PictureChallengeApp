@@ -3,6 +3,7 @@
 <org.gdhote.gdhotecodegroup.pixcha.ui.SquareImageView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profile_grid_list_item_image_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:scaleType="centerCrop"

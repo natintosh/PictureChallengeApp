@@ -1,21 +1,21 @@
 package org.gdhote.gdhotecodegroup.pixcha.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.SignInButton;
+
 import org.gdhote.gdhotecodegroup.pixcha.R;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 public class SignInFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
+    private OnSignInButtonClickListener mListener;
 
     public SignInFragment() {
         // Required empty public constructor
@@ -32,23 +32,34 @@ public class SignInFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
 
+        SignInButton signInButton = view.findViewById(R.id.sign_in_button);
+        signInButton.setSize(SignInButton.SIZE_WIDE);
+        signInButton.setStyle(SignInButton.COLOR_LIGHT, SignInButton.COLOR_AUTO);
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonPressed();
+            }
+        });
+
         return view;
     }
 
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed() {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onSignInBottonClick();
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnSignInButtonClickListener) {
+            mListener = (OnSignInButtonClickListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnSignInButtonClickListener");
         }
     }
 
@@ -58,7 +69,7 @@ public class SignInFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+    public interface OnSignInButtonClickListener {
+        void onSignInBottonClick();
     }
 }
