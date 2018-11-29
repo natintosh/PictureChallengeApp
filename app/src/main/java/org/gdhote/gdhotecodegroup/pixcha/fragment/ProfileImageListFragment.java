@@ -9,6 +9,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -35,8 +36,9 @@ public class ProfileImageListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static RecyclerView mRecyclerView;
+    static RecyclerView mRecyclerView;
     private List<FeedPost> feedList;
+    private ListenerRegistration feedQueryListenerReg;
 
     @Nullable
     @Override
@@ -52,21 +54,28 @@ public class ProfileImageListFragment extends Fragment {
         FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
         CollectionReference colRef = firestoreDb.collection("uploads");
 
-        colRef.whereEqualTo("uploadedBy", user.getId()).orderBy("uploadedAt", Query.Direction.DESCENDING)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                        if (e != null) return;
+        Query query = colRef.orderBy("uploadedAt", Query.Direction.DESCENDING).whereEqualTo("uploadedBy", user.getId());
 
-                        feedList = new ArrayList<>();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            feedList.add(documentSnapshot.toObject(FeedPost.class));
-                        }
+        feedQueryListenerReg = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if (e != null) return;
 
-                        listAdapter.setDataSet(feedList);
-                    }
-                });
+                feedList = new ArrayList<>();
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    feedList.add(documentSnapshot.toObject(FeedPost.class));
+                }
+
+                listAdapter.setDataSet(feedList);
+            }
+        });
 
         return view;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        feedQueryListenerReg.remove();
     }
 }

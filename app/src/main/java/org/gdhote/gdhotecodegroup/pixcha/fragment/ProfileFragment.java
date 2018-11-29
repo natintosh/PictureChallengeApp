@@ -2,21 +2,31 @@ package org.gdhote.gdhotecodegroup.pixcha.fragment;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.gdhote.gdhotecodegroup.pixcha.R;
 import org.gdhote.gdhotecodegroup.pixcha.activity.MainActivity;
 import org.gdhote.gdhotecodegroup.pixcha.adapter.ProfileViewPagerAdapter;
 import org.gdhote.gdhotecodegroup.pixcha.model.CurrentUser;
 import org.gdhote.gdhotecodegroup.pixcha.ui.CircularImageView;
+import org.gdhote.gdhotecodegroup.pixcha.utils.GlideApp;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,9 +44,15 @@ public class ProfileFragment extends Fragment {
     private PagerAdapter mPagerAdapter;
 
     private OnProfileDetailsEditButtonListener mEditButtonCallback;
+    private OnSignOutMenuClickListener mSignOutCallback;
+
 
     public interface OnProfileDetailsEditButtonListener {
         void onProfileDetailsEditButtonClick();
+    }
+
+    public interface OnSignOutMenuClickListener {
+        void onSignOutMenuClick();
     }
 
     @Override
@@ -45,6 +61,7 @@ public class ProfileFragment extends Fragment {
 
         try {
             mEditButtonCallback = (OnProfileDetailsEditButtonListener) context;
+            mSignOutCallback = (OnSignOutMenuClickListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString() + " must implement OnUserInputListener");
         }
@@ -54,6 +71,7 @@ public class ProfileFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mEditButtonCallback = null;
+        mSignOutCallback = null;
     }
 
     @Override
@@ -61,13 +79,7 @@ public class ProfileFragment extends Fragment {
         super.onStart();
         MainActivity.bottomNavigationView.getMenu().getItem(2).setChecked(true);
         MainActivity.activeFragment = this;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        MainActivity.bottomNavigationView.getMenu().getItem(2).setChecked(true);
-//        MainActivity.activeFragment = this;
+        MainActivity.isAwayFromNav = false;
     }
 
     @Override
@@ -78,23 +90,52 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = getView() != null ? getView() : inflater.inflate(R.layout.fragment_profile, container, false);
         setNavigationViewVisibility(true);
         MainActivity.activeFragment = this;
+        MainActivity.isAwayFromNav = false;
 
         CurrentUser user = CurrentUser.getInstance();
         getActivity().setTitle(user.getDisplayName());
         getProfileViewPager();
 
-        TextView bioText = view.findViewById(R.id.profile_detail_bio_tv);
-        bioText.setText(user.getBio());
+        FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
+        CollectionReference userColRef = firestoreDb.collection("users");
+        DocumentReference userDocRef = userColRef.document(user.getId());
+        CollectionReference userUploadsColRef = userDocRef.collection("uploads");
 
+        TextView bioText = view.findViewById(R.id.profile_detail_bio_tv);
+        final TextView postText = view.findViewById(R.id.profile_details_number_of_post_tv);
         CircularImageView profileImage = view.findViewById(R.id.profile_details_profile_image);
-        Glide.with(this).asDrawable().load(user.getProfileImageUrl()).into(profileImage);
-        Button editProfileButton = view.findViewById(R.id.profile_details_edit_profile_btn);
+        FloatingActionButton editProfileButton = view.findViewById(R.id.profile_details_edit_profile_btn);
+
+        bioText.setText(user.getBio());
+        GlideApp.with(this)
+                .asBitmap()
+                .load(user.getProfileImageUrl())
+                .placeholder(new ColorDrawable(Color.LTGRAY))
+                .into(profileImage);
+
+        userUploadsColRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if (e != null) return;
+
+                int number = queryDocumentSnapshots.size();
+
+                postText.setText(Integer.toString(number));
+            }
+        });
+
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +150,13 @@ public class ProfileFragment extends Fragment {
     private void openEditProfileFragment() {
         if (mEditButtonCallback != null) {
             mEditButtonCallback.onProfileDetailsEditButtonClick();
+        }
+    }
+
+    private void signOut() {
+        if (mSignOutCallback != null) {
+            mSignOutCallback.onSignOutMenuClick();
+            ;
         }
     }
 
@@ -191,4 +239,22 @@ public class ProfileFragment extends Fragment {
         return mProfileViewPager;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.profile_details_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final int id = item.getItemId();
+
+        switch (id) {
+            case R.id.profile_details_sign_out_menu:
+                signOut();
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
 }

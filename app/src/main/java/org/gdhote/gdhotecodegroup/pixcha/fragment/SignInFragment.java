@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.google.android.gms.common.SignInButton;
 
 import org.gdhote.gdhotecodegroup.pixcha.R;
+import org.gdhote.gdhotecodegroup.pixcha.activity.MainActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -31,6 +32,8 @@ public class SignInFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
+        MainActivity.bottomNavigationView.getMenu().getItem(0).setChecked(true);
+        MainActivity.bottomNavigationView.setVisibility(View.GONE);
 
         SignInButton signInButton = view.findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_WIDE);

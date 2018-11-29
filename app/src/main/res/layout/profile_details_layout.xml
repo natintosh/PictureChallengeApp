@@ -1,114 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="1"
-    tools:context=".fragment.ProfileFragment">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <org.gdhote.gdhotecodegroup.pixcha.ui.CircularImageView
+        android:id="@+id/profile_details_profile_image"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/profile_details_edit_profile_btn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:weightSum="1">
-
-        <org.gdhote.gdhotecodegroup.pixcha.ui.CircularImageView
-            android:id="@+id/profile_details_profile_image"
-            android:layout_width="84dp"
-            android:layout_height="76dp"
-            android:src="@drawable/me"
-            tools:src="@tools:sample/avatars" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:weightSum="1">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="5" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Posts" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="25" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Max Likes" />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/profile_details_edit_profile_btn"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="32sp"
-                android:background="@drawable/rnd_crn_btn_bg_white_state"
-                android:padding="4dp"
-                android:text="Edit Profile"
-                android:textAllCaps="false"
-                android:textStyle="normal" />
-        </LinearLayout>
-    </LinearLayout>
+        android:clickable="true"
+        android:focusable="true"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_details_profile_image"
+        app:layout_constraintEnd_toEndOf="@+id/profile_details_profile_image"
+        app:srcCompat="@drawable/ic_edit" />
 
     <TextView
         android:id="@+id/profile_detail_bio_tv"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:maxLines="5"
         android:padding="4dp"
         android:paddingBottom="8dp"
+        android:scrollbars="vertical"
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc scelerisque, nunc et dapibus molestie, sapien risus congue erat, at rhoncus est elit sit"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_details_post_text" />
+
+    <TextView
+        android:id="@+id/profile_details_number_of_post_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_details_profile_image"
+        tools:text="5" />
+
+    <TextView
+        android:id="@+id/profile_details_post_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Post"
+        app:layout_constraintEnd_toEndOf="@+id/profile_details_number_of_post_tv"
+        app:layout_constraintStart_toStartOf="@+id/profile_details_number_of_post_tv"
+        app:layout_constraintTop_toBottomOf="@+id/profile_details_number_of_post_tv"
+        tools:text="Post" />
+
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#DEDEDE" />
+        android:background="#DEDEDE"
+        app:layout_constraintTop_toBottomOf="@+id/profile_detail_bio_tv" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="1"
+        app:layout_constraintTop_toBottomOf="@+id/view">
 
         <ImageButton
             android:id="@+id/profile_grid_img_btn"
@@ -145,5 +127,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#DEDEDE" />
-</LinearLayout>
+        android:background="#DEDEDE"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

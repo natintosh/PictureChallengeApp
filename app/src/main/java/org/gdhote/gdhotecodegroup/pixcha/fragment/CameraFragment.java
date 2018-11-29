@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.asksira.bsimagepicker.BSImagePicker;
 import com.asksira.bsimagepicker.Utils;
@@ -24,8 +23,8 @@ import com.otaliastudios.cameraview.Flash;
 
 import org.gdhote.gdhotecodegroup.pixcha.R;
 import org.gdhote.gdhotecodegroup.pixcha.activity.CameraActivity;
-import org.gdhote.gdhotecodegroup.pixcha.viewmodel.ImageBitmapViewModel;
 import org.gdhote.gdhotecodegroup.pixcha.utils.OnSwipeTouchListener;
+import org.gdhote.gdhotecodegroup.pixcha.viewmodel.ImageBitmapViewModel;
 
 import java.io.IOException;
 
@@ -200,7 +199,6 @@ public class CameraFragment extends Fragment implements BSImagePicker.OnSingleIm
 
     @Override
     public void onSingleImageSelected(Uri uri) {
-        Toast.makeText(getContext(), uri.toString(), Toast.LENGTH_SHORT).show();
         ContentResolver contentResolver = getActivity().getContentResolver();
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri);

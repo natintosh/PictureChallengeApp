@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/profile_detail_more_menu"
+        android:icon="@drawable/ic_more_vert"
+        android:title="More"
+        app:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:id="@+id/profile_details_sign_out_menu"
+                android:icon="@drawable/ic_exit_to_app"
+                android:orderInCategory="100"
+                android:title="Sign out"
+                app:showAsAction="ifRoom" />
+
+        </menu>
+    </item>
+
+</menu>

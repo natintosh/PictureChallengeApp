@@ -129,6 +129,13 @@ public class FilterImageFragment extends Fragment implements ThumbnailCallback {
                 ThumbnailsManager.clearThumbs();
                 List<Filter> filters = FilterPack.getFilterPack(getActivity());
 
+
+                ThumbnailItem originalItem = new ThumbnailItem();
+                originalItem.filterName = "Original";
+                originalItem.image = thumbImage;
+                originalItem.filter = new Filter();
+                ThumbnailsManager.addThumb(originalItem);
+
                 for (Filter filter : filters) {
                     ThumbnailItem thumbnailItem = new ThumbnailItem();
                     thumbnailItem.filterName = filter.getName();
@@ -136,7 +143,6 @@ public class FilterImageFragment extends Fragment implements ThumbnailCallback {
                     thumbnailItem.filter = filter;
                     ThumbnailsManager.addThumb(thumbnailItem);
                 }
-
 
                 List<ThumbnailItem> thumbs = ThumbnailsManager.processThumbs(context);
 
@@ -153,7 +159,14 @@ public class FilterImageFragment extends Fragment implements ThumbnailCallback {
     @Override
     public void onThumbnailClick(Filter filter) {
         if (filter != null) {
-            Bitmap filterBitmap = filter.processFilter(Bitmap.createBitmap(mBitmap));
+                Bitmap filterBitmap = filter.processFilter(Bitmap.createBitmap(mBitmap));
+            mImageBitmapViewModel.setFilteredBitmap(filterBitmap);
+            mSquareImage.setImageBitmap(filterBitmap);
+            sBitmap = filterBitmap;
+        }
+
+        if (filter == null) {
+            Bitmap filterBitmap = Bitmap.createBitmap(mBitmap);
             mImageBitmapViewModel.setFilteredBitmap(filterBitmap);
             mSquareImage.setImageBitmap(filterBitmap);
             sBitmap = filterBitmap;

@@ -16,6 +16,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -62,13 +63,14 @@ import static androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
 public class MainActivity extends AppCompatActivity implements SignInFragment.OnSignInButtonClickListener,
         EditProfileFragment.OnSubmitButtonClickListener, EditProfileFragment.OnLoadCropFragment,
         CropImageFragment.OnEditProfileCropListener, CameraFragment.OnUserInputListener,
-        ProfileFragment.OnProfileDetailsEditButtonListener {
+        ProfileFragment.OnProfileDetailsEditButtonListener, ProfileFragment.OnSignOutMenuClickListener {
 
     private static final int RC_SIGN_IN = 1001;
     public static final String TAG = MainActivity.class.getSimpleName();
     private final int FEED_POSTION = 0;
     private final int CAMERA_POSITION = 1;
     private final int PROFILE_POSITION = 2;
+    public static boolean isAwayFromNav = false;
 
     private FragmentManager mFragmentManager;
     private final FeedsFragment mFeedsFragment = new FeedsFragment();
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.On
     public void onBackPressed() {
         int selectedNavItemId = bottomNavigationView.getSelectedItemId();
 
-        if (selectedNavItemId != R.id.nav_action_feeds) {
+        if (selectedNavItemId != R.id.nav_action_feeds || isAwayFromNav) {
             super.onBackPressed();
         } else {
             super.finish();
@@ -143,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.On
             @Override
             public void onBackStackChanged() {
                 // If the stack decreases it means I clicked the back button
-                if (mFragmentManager.getBackStackEntryCount() <= count) {
+                if (mFragmentManager.getBackStackEntryCount() <= count && isAwayFromNav) {
                     // pop all the fragment and remove the listener
                     mFragmentManager.popBackStack(PROFILE_POSITION, POP_BACK_STACK_INCLUSIVE);
                     mFragmentManager.removeOnBackStackChangedListener(this);
@@ -402,5 +404,17 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.On
     @Override
     public void onProfileDetailsEditButtonClick() {
         loadFragment(EditProfileFragment.newInstance(1), true);
+    }
+
+    @Override
+    public void onSignOutMenuClick() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        loadFragment(mSignInFragment, false);
+                    }
+                });
     }
 }

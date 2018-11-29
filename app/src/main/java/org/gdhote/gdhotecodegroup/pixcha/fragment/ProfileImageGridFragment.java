@@ -10,6 +10,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -38,6 +39,7 @@ public class ProfileImageGridFragment extends Fragment implements ProfileGridAda
 
     private RecyclerView mRecyclerView;
     private List<FeedPost> feedList;
+    private ListenerRegistration feedQueryListenerReg;
 
     @Nullable
     @Override
@@ -53,22 +55,29 @@ public class ProfileImageGridFragment extends Fragment implements ProfileGridAda
         FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
         CollectionReference colRef = firestoreDb.collection("uploads");
 
-        colRef.whereEqualTo("uploadedBy", user.getId()).orderBy("uploadedAt", Query.Direction.DESCENDING)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                        if (e != null) return;
+        Query query = colRef.orderBy("uploadedAt", Query.Direction.DESCENDING).whereEqualTo("uploadedBy", user.getId());
 
-                        feedList = new ArrayList<>();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            feedList.add(documentSnapshot.toObject(FeedPost.class));
-                        }
+        feedQueryListenerReg = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if (e != null) return;
 
-                        gridListAdapter.setDataSet(feedList);
-                    }
-                });
+                feedList = new ArrayList<>();
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    feedList.add(documentSnapshot.toObject(FeedPost.class));
+                }
+
+                gridListAdapter.setDataSet(feedList);
+            }
+        });
 
         return view;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        feedQueryListenerReg.remove();
     }
 
     @Override

@@ -2,7 +2,9 @@ package org.gdhote.gdhotecodegroup.pixcha.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import org.gdhote.gdhotecodegroup.pixcha.R;
 import org.gdhote.gdhotecodegroup.pixcha.model.FeedPost;
 import org.gdhote.gdhotecodegroup.pixcha.ui.SquareImageView;
 import org.gdhote.gdhotecodegroup.pixcha.utils.GlideApp;
+import org.gdhote.gdhotecodegroup.pixcha.utils.GlideRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +58,8 @@ public class ProfileGridAdapter extends RecyclerView.Adapter<ProfileGridAdapter.
 
         GlideApp.with(context)
                 .asBitmap()
-                .placeholder(R.drawable.me)
                 .load(post.getImageUrl())
+                .placeholder(new ColorDrawable(Color.LTGRAY))
                 .into(holder.feedImage);
 
     }

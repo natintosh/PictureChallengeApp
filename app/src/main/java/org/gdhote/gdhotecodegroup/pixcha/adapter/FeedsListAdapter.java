@@ -12,8 +12,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -94,13 +92,14 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
 
                 GlideApp.with(context)
                         .asBitmap()
+                        .placeholder(new ColorDrawable(Color.LTGRAY))
                         .load(user[0].getProfileImageUrl())
                         .into(holder.profileImage);
                 holder.displayName.setText(user[0].getDisplayName());
 
                 GlideApp.with(context)
                         .asBitmap()
-                        .placeholder(R.drawable.me)
+                        .placeholder(new ColorDrawable(Color.LTGRAY))
                         .load(post.getImageUrl())
                         .into(holder.feedImage);
 
@@ -113,11 +112,12 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
                         if (e != null) return;
 
                         String likes = Integer.toString(queryDocumentSnapshots != null ? queryDocumentSnapshots.size() : 0);
-                        holder.likesText.setText(likes);
+                        holder.likesNoText.setText(likes);
                     }
                 });
 
                 holder.timeText.setText(DateUtils.getRelativeTimeSpanString(post.getUploadedAt().toDate().getTime()));
+
             }
         });
 
@@ -166,7 +166,8 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
         private SquareImageView feedImage;
         private CheckBox likeCheckBox;
         private TextView feedCaptionText;
-        private TextView likesText;
+        private TextView likesNoText;
+        private TextView likeText;
         private TextView timeText;
 
         FeedsListAdapterViewHolder(@NonNull View itemView) {
@@ -176,7 +177,8 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
             feedImage = itemView.findViewById(R.id.feed_square_content_image);
             likeCheckBox = itemView.findViewById(R.id.feed_like_check_box);
             feedCaptionText = itemView.findViewById(R.id.feed_caption_text);
-            likesText = itemView.findViewById(R.id.feed_content_likes_text);
+            likesNoText = itemView.findViewById(R.id.feed_content_likes_text);
+            likeText = itemView.findViewById(R.id.feed_text_like);
             timeText = itemView.findViewById(R.id.feed_uploaded_time_tv);
 
         }

@@ -2,7 +2,9 @@ package org.gdhote.gdhotecodegroup.pixcha.fragment;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,7 +17,6 @@ import android.view.WindowManager;
 
 import com.asksira.bsimagepicker.BSImagePicker;
 import com.asksira.bsimagepicker.Utils;
-import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -24,7 +25,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.gdhote.gdhotecodegroup.pixcha.R;
 import org.gdhote.gdhotecodegroup.pixcha.activity.MainActivity;
+import org.gdhote.gdhotecodegroup.pixcha.model.CurrentUser;
 import org.gdhote.gdhotecodegroup.pixcha.ui.CircularImageView;
+import org.gdhote.gdhotecodegroup.pixcha.utils.GlideApp;
 import org.gdhote.gdhotecodegroup.pixcha.viewmodel.EditProfileViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -79,6 +82,7 @@ public class EditProfileFragment extends Fragment implements BSImagePicker.OnSin
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         profileViewModel = ViewModelProviders.of(getActivity()).get(EditProfileViewModel.class);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        MainActivity.isAwayFromNav = true;
 
         if (mFragmentCase == 0) {
             getActivity().setTitle("Update profile");
@@ -88,6 +92,7 @@ public class EditProfileFragment extends Fragment implements BSImagePicker.OnSin
         if (mFragmentCase == 1) {
             getActivity().setTitle("Edit profile");
             shouldShowAppBar(true);
+            profileViewModel.setCurrentUser(CurrentUser.getInstance());
         }
 
         initialiseViews(view);
@@ -134,7 +139,12 @@ public class EditProfileFragment extends Fragment implements BSImagePicker.OnSin
     }
 
     private void insertDataIntoView() {
-        Glide.with(this).load(profileViewModel.getProfilePictureUrl()).into(profileImageView);
+        GlideApp.with(this)
+                .asBitmap()
+                .placeholder(new ColorDrawable(Color.LTGRAY))
+                .load(profileViewModel.getProfilePictureUrl())
+                .into(profileImageView);
+
 
         profileViewModel.getProfilePicture().observe(getActivity(), new Observer<Bitmap>() {
             @Override
@@ -150,12 +160,7 @@ public class EditProfileFragment extends Fragment implements BSImagePicker.OnSin
     @Override
     public void onResume() {
         super.onResume();
-        profileViewModel.getProfilePicture().observe(getActivity(), new Observer<Bitmap>() {
-            @Override
-            public void onChanged(Bitmap bitmap) {
-                profileImageView.setImageBitmap(bitmap);
-            }
-        });
+        newInstance(mFragmentCase);
     }
 
     private void initialiseViews(View view) {

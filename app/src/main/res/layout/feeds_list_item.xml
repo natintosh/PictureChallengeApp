@@ -34,10 +34,9 @@
 
     <org.gdhote.gdhotecodegroup.pixcha.ui.SquareImageView
         android:id="@+id/feed_square_content_image"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:src="@drawable/me"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

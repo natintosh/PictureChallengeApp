@@ -5,6 +5,8 @@ import android.net.Uri;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import org.gdhote.gdhotecodegroup.pixcha.model.User;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -34,6 +36,14 @@ public class EditProfileViewModel extends ViewModel {
         setDisplayName(user.getDisplayName());
         setEmailAddress(user.getEmail());
         setProfilePictureUrl(user.getPhotoUrl());
+    }
+
+    public void setCurrentUser(User user) {
+        setId(user.getId());
+        setDisplayName(user.getDisplayName());
+        setEmailAddress(user.getEmailAddress());
+        setProfilePictureUrl(Uri.parse(user.getProfileImageUrl()));
+        setBio(user.getBio());
     }
 
     public String getId() {

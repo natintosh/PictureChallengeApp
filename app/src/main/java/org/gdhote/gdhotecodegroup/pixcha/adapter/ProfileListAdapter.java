@@ -2,6 +2,8 @@ package org.gdhote.gdhotecodegroup.pixcha.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,13 +91,15 @@ public class ProfileListAdapter extends RecyclerView.Adapter<ProfileListAdapter.
 
                 GlideApp.with(context)
                         .asBitmap()
+                        .placeholder(new ColorDrawable(Color.LTGRAY))
                         .load(user[0].getProfileImageUrl())
                         .into(holder.profileImage);
+
                 holder.displayName.setText(user[0].getDisplayName());
 
                 GlideApp.with(context)
                         .asBitmap()
-                        .placeholder(R.drawable.me)
+                        .placeholder(new ColorDrawable(Color.WHITE))
                         .load(post.getImageUrl())
                         .into(holder.feedImage);
 
