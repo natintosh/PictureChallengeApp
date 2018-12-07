@@ -1,9 +1,6 @@
 package org.gdhote.gdhotecodegroup.pixcha.model;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
-
-import java.util.Date;
 
 ;
 

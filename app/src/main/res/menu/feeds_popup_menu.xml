@@ -11,7 +11,7 @@
 
     <item
         android:id="@+id/feed_popup_more_menu"
-        android:icon="@drawable/ic_more_vert_black"
+        android:icon="@drawable/ic_more_vert"
         android:orderInCategory="200"
         android:title="More"
         app:showAsAction="always">

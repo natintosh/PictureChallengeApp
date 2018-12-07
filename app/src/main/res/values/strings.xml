@@ -14,5 +14,6 @@
     <string name="caption">Caption</string>
     <string name="post">Post</string>
     <string name="no_result_found">No result found</string>
+    <string name="enter_message">Enter message</string>
 
 </resources>

@@ -8,15 +8,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Vibrator;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -24,7 +20,6 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -34,9 +29,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.WriteBatch;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import org.gdhote.gdhotecodegroup.pixcha.R;
 import org.gdhote.gdhotecodegroup.pixcha.model.CurrentUser;
@@ -54,8 +46,6 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,10 +54,27 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
 
     private Context context;
     private List<FeedPost> feedPostList;
+    private SetFeedListItemCallback itemCallback;
 
-    public FeedsListAdapter(Context context) {
+    public interface SetFeedListItemCallback {
+
+        void onSquareImageLongPress(String postId);
+
+        void onPopUpMenuPress(User user, FeedPost feedPost, ImageButton imageButton);
+    }
+
+    private void OnSquareImageLongPress(String postId) {
+        if (itemCallback != null) itemCallback.onSquareImageLongPress(postId);
+    }
+
+    private void OnPopUpMenuPress(User user, FeedPost feedPost, ImageButton imageButton) {
+        if (itemCallback != null) itemCallback.onPopUpMenuPress(user, feedPost, imageButton);
+    }
+
+    public FeedsListAdapter(Context context, SetFeedListItemCallback callback) {
         feedPostList = new ArrayList<>();
         this.context = context;
+        this.itemCallback = callback;
     }
 
     public void setDataSet(List<FeedPost> dataSet) {
@@ -205,7 +212,17 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
             public boolean onLongClick(View v) {
                 Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                 vibrator.vibrate(50);
-                Toast.makeText(context, "Long Click", Toast.LENGTH_SHORT).show();
+                OnSquareImageLongPress(post.getId());
+                return false;
+            }
+        });
+
+        holder.feedImage.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                vibrator.vibrate(50);
+                OnSquareImageLongPress(post.getId());
                 return false;
             }
         });
@@ -213,104 +230,7 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
         holder.popupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(v.getContext(), holder.popupButton);
-                popupMenu.getMenuInflater().inflate(R.menu.feeds_popup_menu, popupMenu.getMenu());
-                if (user[0] != null) {
-                    if (!user[0].getId().equals(CurrentUser.getInstance().getId())) {
-                        MenuItem item = popupMenu.getMenu().findItem(R.id.feed_popup_more_menu);
-                        if (item != null) {
-                            item.setVisible(false);
-                        }
-                    }
-                    popupMenu.show();
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            int id = item.getItemId();
-                            switch (id) {
-                                case R.id.feed_popup_report_action_menu:
-                                    final AlertDialog dialogBuilder = new AlertDialog.Builder(context).create();
-                                    View dialogView = dialogBuilder.getLayoutInflater().inflate(R.layout.dialog_custom_report, null);
-
-                                    final EditText reportEditText = dialogView.findViewById(R.id.report_dialog_edit_text);
-                                    Button cancelButton = dialogView.findViewById(R.id.report_dialog_cancel_btn);
-                                    Button submitButton = dialogView.findViewById(R.id.report_dialog_submit_btn);
-
-                                    cancelButton.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            dialogBuilder.dismiss();
-                                        }
-                                    });
-
-                                    submitButton.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Map<String, Object> reportMap = new HashMap<>();
-                                            reportMap.put("reportedBy", CurrentUser.getInstance().getId());
-                                            reportMap.put("reportedPost", post.getId());
-                                            reportMap.put("reportedText", reportEditText.getText().toString());
-
-                                            firestoreDb.collection("reports").document()
-                                                    .set(reportMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Toast.makeText(context, "Reported", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                            dialogBuilder.dismiss();
-                                        }
-                                    });
-
-                                    dialogBuilder.setView(dialogView);
-                                    dialogBuilder.show();
-                                    break;
-                                case R.id.feed_popup_delete_action_menu:
-                                    final WriteBatch batch = firestoreDb.batch();
-
-                                    StorageReference rootStorageReference = FirebaseStorage.getInstance().getReference();
-                                    StorageReference profileImagesStorageRef = rootStorageReference.child("uploaded_images");
-                                    String fileName = "image" + "_" + post.getId() + ".jpg";
-                                    final StorageReference fileRef = profileImagesStorageRef.child(fileName);
-
-                                    fileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            feedDocRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    likesColRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                                                            if (task.isSuccessful() || !task.getResult().isEmpty()) {
-                                                                for (DocumentSnapshot snapshot : task.getResult()) {
-                                                                    batch.delete(snapshot.getReference());
-                                                                }
-                                                            }
-                                                            batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void aVoid) {
-                                                                    Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            });
-                                                        }
-                                                    });
-                                                }
-                                            });
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(context, "Unknown error occurred", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                    break;
-                            }
-                            return false;
-                        }
-                    });
-                }
+                OnPopUpMenuPress(user[0], post, holder.popupButton);
             }
         });
     }
