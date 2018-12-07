@@ -11,9 +11,14 @@
     <item
         android:id="@+id/rotate_crop_image_menu"
         android:icon="@drawable/ic_rotate_right"
-        android:orderInCategory="200"
+        android:orderInCategory="101"
         android:title="Rotate"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/skip_crop_image_menu"
+        android:orderInCategory="102"
+        android:title="Skip"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/crop_crop_image_menu"
         android:orderInCategory="300"

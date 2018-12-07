@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/report_dialog_title"
+        style="@style/ReportDialogTitleStyle"
+        android:text="@string/report_dialog_title"
+        app:layout_constraintStart_toStartOf="@+id/report_dialog_edit_text"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/report_dialog_edit_text"
+        style="@style/ReportDialogEditTextStyle"
+        android:hint="@string/report_dialog_hint"
+        android:theme="@style/AppGeneralEditTextTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/report_dialog_title" />
+
+    <Button
+        android:id="@+id/report_dialog_submit_btn"
+        style="@style/ReportSubmitButtonStyle"
+        android:text="@string/submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/report_dialog_cancel_btn" />
+
+    <Button
+        android:id="@+id/report_dialog_cancel_btn"
+        style="@style/ReportCancelButtonStyle"
+        android:text="@string/cancel"
+        app:layout_constraintEnd_toStartOf="@+id/report_dialog_submit_btn"
+        app:layout_constraintTop_toBottomOf="@+id/report_dialog_edit_text" />
+</androidx.constraintlayout.widget.ConstraintLayout>

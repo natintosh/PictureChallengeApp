@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.asksira.android:bsimagepicker-1.0.1">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-bsimagepicker-1.0.1.aar/5cb9d67887bce332d41a8b98a180d205/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-bsimagepicker-1.0.1.aar/5cb9d67887bce332d41a8b98a180d205/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-bsimagepicker-1.0.1.aar/86a64c7b3a0cf368c347150c02e0f456/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-bsimagepicker-1.0.1.aar/86a64c7b3a0cf368c347150c02e0f456/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

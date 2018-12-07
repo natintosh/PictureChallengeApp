@@ -8,13 +8,13 @@
 
     <org.gdhote.gdhotecodegroup.pixcha.ui.CircularImageView
         android:id="@+id/profile_details_profile_image"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_width="@dimen/size_120dp"
+        android:layout_height="@dimen/size_120dp"
+        android:layout_marginStart="@dimen/margin_8dp"
+        android:layout_marginLeft="@dimen/margin_8dp"
+        android:layout_marginTop="@dimen/margin_8dp"
+        android:layout_marginEnd="@dimen/margin_8dp"
+        android:layout_marginRight="@dimen/margin_8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -35,32 +35,31 @@
         android:id="@+id/profile_detail_bio_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="@dimen/margin_8dp"
+        android:layout_marginLeft="@dimen/margin_8dp"
+        android:layout_marginTop="@dimen/margin_8dp"
+        android:layout_marginEnd="@dimen/margin_8dp"
+        android:layout_marginRight="@dimen/margin_8dp"
         android:maxLines="5"
-        android:padding="4dp"
-        android:paddingBottom="8dp"
+        android:padding="@dimen/padding_4dp"
+        android:paddingBottom="@dimen/padding_8dp"
         android:scrollbars="vertical"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc scelerisque, nunc et dapibus molestie, sapien risus congue erat, at rhoncus est elit sit"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_size_14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_details_post_text" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_details_post_text"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc scelerisque, nunc et dapibus molestie, sapien risus congue erat, at rhoncus est elit sit" />
 
     <TextView
         android:id="@+id/profile_details_number_of_post_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="5"
+        android:layout_marginStart="@dimen/margin_8dp"
+        android:layout_marginLeft="@dimen/margin_8dp"
+        android:layout_marginTop="@dimen/margin_8dp"
+        android:layout_marginEnd="@dimen/margin_8dp"
+        android:layout_marginRight="@dimen/margin_8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_details_profile_image"
@@ -70,7 +69,7 @@
         android:id="@+id/profile_details_post_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Post"
+        android:text="@string/post"
         app:layout_constraintEnd_toEndOf="@+id/profile_details_number_of_post_tv"
         app:layout_constraintStart_toStartOf="@+id/profile_details_number_of_post_tv"
         app:layout_constraintTop_toBottomOf="@+id/profile_details_number_of_post_tv"
@@ -80,8 +79,8 @@
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#DEDEDE"
+        android:layout_height="@dimen/size_1dp"
+        android:background="@color/lightGreyColor"
         app:layout_constraintTop_toBottomOf="@+id/profile_detail_bio_tv" />
 
     <LinearLayout
@@ -95,18 +94,17 @@
         <ImageButton
             android:id="@+id/profile_grid_img_btn"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="40sp"
+            android:layout_width="@dimen/size_0dp"
+            android:layout_height="@dimen/text_size_40sp"
             android:layout_weight="0.5"
             android:background="@drawable/btn_bg_white_state"
-            android:text="Edit Profile"
             android:textAllCaps="false"
             android:textStyle="normal"
             app:srcCompat="@drawable/ic_picture_grid" />
 
 
         <View
-            android:layout_width="1dp"
+            android:layout_width="@dimen/size_1dp"
             android:layout_height="match_parent"
             android:background="#DEDEDE" />
 
@@ -114,11 +112,10 @@
         <ImageButton
             android:id="@+id/profile_list_img_btn"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="40sp"
+            android:layout_width="@dimen/size_0dp"
+            android:layout_height="@dimen/text_size_40sp"
             android:layout_weight="0.5"
             android:background="@drawable/btn_bg_white_state"
-            android:text="Edit Profile"
             android:textAllCaps="false"
             android:textStyle="normal"
             app:srcCompat="@drawable/ic_photo" />
@@ -126,8 +123,8 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#DEDEDE"
+        android:layout_height="@dimen/size_1dp"
+        android:background="@color/lightGreyColor"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

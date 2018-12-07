@@ -35,7 +35,7 @@ public class FilterThumbnailListAdapter extends RecyclerView.Adapter<FilterThumb
     @NonNull
     @Override
     public FilterThumbnailListAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.filter_thumbnail_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_filter_thumbnail, parent, false);
 
         return new FilterThumbnailListAdapterViewHolder(view);
     }

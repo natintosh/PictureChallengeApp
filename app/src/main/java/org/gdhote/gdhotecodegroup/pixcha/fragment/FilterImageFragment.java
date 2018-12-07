@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -50,9 +49,7 @@ import org.gdhote.gdhotecodegroup.pixcha.utils.GlideApp;
 import org.gdhote.gdhotecodegroup.pixcha.viewmodel.ImageBitmapViewModel;
 
 import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -159,7 +156,7 @@ public class FilterImageFragment extends Fragment implements ThumbnailCallback {
     @Override
     public void onThumbnailClick(Filter filter) {
         if (filter != null) {
-                Bitmap filterBitmap = filter.processFilter(Bitmap.createBitmap(mBitmap));
+            Bitmap filterBitmap = filter.processFilter(mBitmap.copy(Bitmap.Config.ARGB_8888,true));
             mImageBitmapViewModel.setFilteredBitmap(filterBitmap);
             mSquareImage.setImageBitmap(filterBitmap);
             sBitmap = filterBitmap;
@@ -189,9 +186,7 @@ public class FilterImageFragment extends Fragment implements ThumbnailCallback {
                 FirebaseFirestore firebaseDb = FirebaseFirestore.getInstance();
                 final CollectionReference uploadColRef = firebaseDb.collection("uploads");
                 final DocumentReference uploadDocRef = uploadColRef.document();
-                final CollectionReference userUploadColRef = firebaseDb.collection("users")
-                        .document(user.getUid()).collection("uploads");
-
+//
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference rootStorageReference = storage.getReference();
                 StorageReference profileImagesStorageRef = rootStorageReference.child("uploaded_images");
@@ -230,18 +225,9 @@ public class FilterImageFragment extends Fragment implements ThumbnailCallback {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(getContext(), "Successfully add new post", Toast.LENGTH_SHORT).show();
-                                Map<String, Object> entry = new HashMap<>();
-                                entry.put("id", uploadDocRef.getId());
-                                entry.put("uploadedAt", timestamp);
-
-                                userUploadColRef.document(uploadDocRef.getId()).set(entry).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        closeProgressDialog();
-                                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                                        startActivity(intent);
-                                    }
-                                });
+                                closeProgressDialog();
+                                Intent intent = new Intent(getActivity(), MainActivity.class);
+                                startActivity(intent);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -266,10 +252,10 @@ public class FilterImageFragment extends Fragment implements ThumbnailCallback {
     }
 
 
-    Dialog dialog;
+    private Dialog dialog;
 
-    public void openProgressDialog() {
-        View imageDialog = getLayoutInflater().inflate(R.layout.custom_image_dialog, null);
+    private void openProgressDialog() {
+        View imageDialog = getLayoutInflater().inflate(R.layout.dialog_custom_image, null);
         dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
@@ -285,7 +271,7 @@ public class FilterImageFragment extends Fragment implements ThumbnailCallback {
         dialog.show();
     }
 
-    public void closeProgressDialog() {
+    private void closeProgressDialog() {
         dialog.dismiss();
     }
 

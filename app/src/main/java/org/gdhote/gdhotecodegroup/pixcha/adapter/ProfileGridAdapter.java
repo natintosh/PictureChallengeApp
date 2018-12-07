@@ -13,7 +13,6 @@ import org.gdhote.gdhotecodegroup.pixcha.R;
 import org.gdhote.gdhotecodegroup.pixcha.model.FeedPost;
 import org.gdhote.gdhotecodegroup.pixcha.ui.SquareImageView;
 import org.gdhote.gdhotecodegroup.pixcha.utils.GlideApp;
-import org.gdhote.gdhotecodegroup.pixcha.utils.GlideRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,7 @@ public class ProfileGridAdapter extends RecyclerView.Adapter<ProfileGridAdapter.
     @NonNull
     @Override
     public ProfileGridAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_image_grid_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_item_profile_image, parent, false);
         return new ProfileGridAdapterViewHolder(view);
     }
 

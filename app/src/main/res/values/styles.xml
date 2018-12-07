@@ -3,9 +3,205 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="colorControlActivated">@color/lightGreyColor</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--
+        -       Themes
+    -->
+
+    <style name="AppGeneralEditTextTheme">
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="colorControlHighlight">@color/secondaryDarkColor</item>
+        <item name="colorControlNormal">@color/lightGreyColor</item>
+    </style>
+
+
+    <!--
+        -      Styles for Views
+    -->
+
+
+    <style name="CameraFlashSwitchStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/margin_16dp</item>
+        <item name="android:layout_marginLeft">@dimen/margin_16dp</item>
+        <item name="android:layout_marginTop">@dimen/margin_8dp</item>
+        <item name="android:layout_marginEnd">@dimen/margin_16dp</item>
+        <item name="android:layout_marginRight">@dimen/margin_16dp</item>
+        <item name="android:layout_marginBottom">@dimen/margin_16dp</item>
+        <item name="android:background">@drawable/btn_circle_state</item>
+    </style>
+
+    <style name="CameraShutterButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/margin_8dp</item>
+        <item name="android:layout_marginLeft">@dimen/margin_8dp</item>
+        <item name="android:layout_marginTop">@dimen/margin_8dp</item>
+        <item name="android:layout_marginEnd">@dimen/margin_8dp</item>
+        <item name="android:layout_marginRight">@dimen/margin_8dp</item>
+        <item name="android:layout_marginBottom">@dimen/margin_8dp</item>
+        <item name="android:background">@drawable/shutter_btn_state</item>
+    </style>
+
+    <style name="CameraActiveSwitchStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/margin_16dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginTop">@dimen/margin_16dp</item>
+        <item name="android:layout_marginEnd">@dimen/margin_16dp</item>
+        <item name="android:layout_marginRight">@dimen/margin_16dp</item>
+        <item name="android:layout_marginBottom">@dimen/margin_16dp</item>
+        <item name="android:background">@drawable/btn_circle_state</item>
+    </style>
+
+    <style name="CameraSwipeUpButtonStyle">
+        <item name="android:layout_width">@dimen/size_24dp</item>
+        <item name="android:layout_height">@dimen/size_24dp</item>
+        <item name="android:layout_marginStart">@dimen/margin_8dp</item>
+        <item name="android:layout_marginLeft">@dimen/margin_8dp</item>
+        <item name="android:layout_marginTop">@dimen/margin_8dp</item>
+        <item name="android:layout_marginEnd">@dimen/margin_8dp</item>
+        <item name="android:layout_marginRight">@dimen/margin_8dp</item>
+        <item name="android:layout_marginBottom">@dimen/margin_8dp</item>
+        <item name="android:background">@drawable/btn_circle_state</item>
+    </style>
+
+    <style name="ReportDialogTitleStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/margin_8dp</item>
+        <item name="android:layout_marginLeft">@dimen/margin_8dp</item>
+        <item name="android:layout_marginTop">@dimen/margin_8dp</item>
+        <item name="android:textColor">@color/lightDarkTextColor</item>
+        <item name="android:textSize">@dimen/text_size_18sp</item>
+    </style>
+
+    <style name="ReportDialogEditTextStyle">
+        <item name="android:layout_width">@dimen/size_0dp</item>
+        <item name="android:layout_height">@dimen/size_84dp</item>
+        <item name="android:layout_marginStart">@dimen/margin_8dp</item>
+        <item name="android:layout_marginLeft">@dimen/margin_8dp</item>
+        <item name="android:layout_marginTop">@dimen/margin_8dp</item>
+        <item name="android:layout_marginEnd">@dimen/margin_8dp</item>
+        <item name="android:layout_marginRight">@dimen/margin_8dp</item>
+        <item name="android:ems">10</item>
+        <item name="android:gravity">top</item>
+        <item name="android:inputType">textMultiLine</item>
+    </style>
+
+    <style name="ReportCancelButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_8dp</item>
+        <item name="android:layout_marginEnd">@dimen/margin_8dp</item>
+        <item name="android:layout_marginRight">@dimen/margin_8dp</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="ReportSubmitButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">@dimen/margin_8dp</item>
+        <item name="android:layout_marginRight">@dimen/margin_8dp</item>
+        <item name="android:layout_marginBottom">@dimen/margin_8dp</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="FeedItemCircularImageStyle">
+        <item name="android:layout_width">@dimen/size_32dp</item>
+        <item name="android:layout_height">@dimen/size_32dp</item>
+        <item name="android:layout_marginStart">@dimen/margin_4dp</item>
+        <item name="android:layout_marginLeft">@dimen/margin_4dp</item>
+        <item name="android:contentDescription">@string/feed_image</item>
+    </style>
+
+    <style name="FeedItemUserNameTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_margin">@dimen/margin_4dp</item>
+        <item name="android:layout_marginStart">@dimen/margin_8dp</item>
+        <item name="android:layout_marginLeft">@dimen/margin_8dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">@dimen/text_size_14sp</item>
+    </style>
+
+    <style name="FeedItemSquareImageStyle">
+        <item name="android:layout_width">@dimen/size_0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_45dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="FeedItemPopUpImageStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_8dp</item>
+        <item name="android:layout_marginEnd">@dimen/margin_8dp</item>
+        <item name="android:layout_marginRight">@dimen/margin_8dp</item>
+        <item name="android:padding">@dimen/padding_8dp</item>
+        <item name="android:layout_marginBottom">@dimen/margin_8dp</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="FeedItemConstraintStyle">
+        <item name="android:layout_width">@dimen/size_0dp</item>
+        <item name="android:layout_height">@dimen/size_0dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="FeedItemLikeTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_8dp</item>
+        <item name="android:textColor">@color/browser_actions_bg_grey</item>
+        <item name="android:textSize">@dimen/text_size_18sp</item>
+    </style>
+
+    <style name="FeedItemCaptionStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/margin_8dp</item>
+        <item name="android:layout_marginLeft">@dimen/margin_8dp</item>
+        <item name="android:layout_marginEnd">@dimen/margin_8dp</item>
+        <item name="android:layout_marginRight">@dimen/margin_8dp</item>
+        <item name="android:layout_marginBottom">@dimen/margin_8dp</item>
+        <item name="android:padding">@dimen/padding_8dp</item>
+        <item name="android:textColor">@color/browser_actions_bg_grey</item>
+        <item name="android:textSize">@dimen/text_size_12sp</item>
+    </style>
+
+    <style name="feedItemTimeStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">@dimen/margin_8dp</item>
+        <item name="android:layout_marginRight">@dimen/margin_8dp</item>
+        <item name="android:layout_marginBottom">@dimen/margin_8dp</item>
+        <item name="android:textColor">@color/browser_actions_bg_grey</item>
+        <item name="android:textSize">@dimen/text_size_12sp</item>
+    </style>
+
 
 </resources>

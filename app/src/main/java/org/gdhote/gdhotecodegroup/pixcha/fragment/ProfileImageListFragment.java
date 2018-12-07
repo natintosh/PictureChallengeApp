@@ -1,15 +1,16 @@
 package org.gdhote.gdhotecodegroup.pixcha.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -37,8 +38,28 @@ public class ProfileImageListFragment extends Fragment {
     }
 
     static RecyclerView mRecyclerView;
+    private ProfileListAdapter listAdapter;
     private List<FeedPost> feedList;
-    private ListenerRegistration feedQueryListenerReg;
+
+    private static String ARG_USER = "user";
+
+    public static ProfileImageListFragment newInstance(User user) {
+        ProfileImageListFragment fragment = new ProfileImageListFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_USER, user);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private User user;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            user = (User) getArguments().getSerializable(ARG_USER);
+        }
+    }
 
     @Nullable
     @Override
@@ -47,35 +68,43 @@ public class ProfileImageListFragment extends Fragment {
 
 
         mRecyclerView = view.findViewById(R.id.profile_list_rv);
-        final ProfileListAdapter listAdapter = new ProfileListAdapter(getContext());
+        listAdapter = new ProfileListAdapter(getContext());
         mRecyclerView.setAdapter(listAdapter);
 
-        User user = CurrentUser.getInstance();
-        FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
-        CollectionReference colRef = firestoreDb.collection("uploads");
-
-        Query query = colRef.orderBy("uploadedAt", Query.Direction.DESCENDING).whereEqualTo("uploadedBy", user.getId());
-
-        feedQueryListenerReg = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                if (e != null) return;
-
-                feedList = new ArrayList<>();
-                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    feedList.add(documentSnapshot.toObject(FeedPost.class));
-                }
-
-                listAdapter.setDataSet(feedList);
-            }
-        });
+        fetchDataIntoListAdapter();
 
         return view;
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        feedQueryListenerReg.remove();
+    private void fetchDataIntoListAdapter() {
+        User user = (this.user != null ? this.user : CurrentUser.getInstance());
+        FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
+        CollectionReference colRef = firestoreDb.collection("uploads");
+        Query query = colRef.orderBy("uploadedAt", Query.Direction.DESCENDING).whereEqualTo("uploadedBy", user.getId());
+
+
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                feedList = new ArrayList<>();
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    feedList.add(documentSnapshot.toObject(FeedPost.class));
+                }
+                listAdapter.setDataSet(feedList);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "failed to update list", Toast.LENGTH_SHORT).show();
+                Log.d(ProfileImageListFragment.class.getSimpleName(), e.getMessage());
+            }
+        });
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchDataIntoListAdapter();
+    }
+
 }

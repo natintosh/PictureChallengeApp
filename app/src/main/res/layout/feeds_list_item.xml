@@ -7,10 +7,7 @@
 
     <org.gdhote.gdhotecodegroup.pixcha.ui.CircularImageView
         android:id="@+id/feed_circular_profile_image"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
+        style="@style/FeedItemCircularImageStyle"
         app:layout_constraintBottom_toTopOf="@+id/feed_square_content_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -18,109 +15,82 @@
 
     <TextView
         android:id="@+id/feed_user_name_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_margin="4dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textSize="14sp"
+        style="@style/FeedItemUserNameTextStyle"
         app:layout_constraintBottom_toBottomOf="@+id/feed_circular_profile_image"
         app:layout_constraintStart_toEndOf="@+id/feed_circular_profile_image"
         app:layout_constraintTop_toTopOf="@+id/feed_circular_profile_image"
-        tools:text="oluwatobiloba" />
+        tools:text="@tools:sample/full_names" />
 
     <org.gdhote.gdhotecodegroup.pixcha.ui.SquareImageView
         android:id="@+id/feed_square_content_image"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        style="@style/FeedItemSquareImageStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/backgrounds/scenic" />
 
-
-    <TextView
-        android:id="@+id/feed_caption_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
-        android:ellipsize="end"
-        android:maxLines="3"
-        android:padding="4dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+    <ImageButton
+        android:id="@+id/feed_popup_menu_btn"
+        style="@style/FeedItemPopUpImageStyle"
+        app:layout_constraintBottom_toTopOf="@+id/feed_square_content_image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/feed_like_check_box"
-        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_more_vert_black" />
 
-    <CheckBox
-        android:id="@+id/feed_like_check_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:button="@drawable/ic_like_state"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/feed_square_content_image" />
-
-    <TextView
-        android:id="@+id/feed_content_likes_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/feed_like_check_box"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/feed_like_check_box"
-        tools:text="0" />
-
-    <TextView
-        android:id="@+id/feed_text_like"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="likes"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/feed_content_likes_text"
-        app:layout_constraintStart_toEndOf="@+id/feed_content_likes_text"
-        app:layout_constraintTop_toTopOf="@+id/feed_content_likes_text" />
-
-    <View
-        android:id="@+id/feed_content_seperator"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="4dp"
-        android:background="#dedede"
-        app:layout_constraintEnd_toEndOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/feed_content_layout"
+        style="@style/FeedItemConstraintStyle"
+        android:hapticFeedbackEnabled="true"
+        app:layout_constraintBottom_toBottomOf="@+id/feed_square_content_image"
+        app:layout_constraintEnd_toEndOf="@+id/feed_square_content_image"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/feed_uploaded_time_tv" />
+        app:layout_constraintStart_toStartOf="@+id/feed_square_content_image"
+        app:layout_constraintTop_toTopOf="@+id/feed_square_content_image"
+        app:layout_constraintVertical_bias="1.0">
 
-    <TextView
-        android:id="@+id/feed_uploaded_time_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/feed_caption_text"
-        tools:text="10 MINUTES AGO" />
+        <View
+            android:id="@+id/feed_content_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.7"
+            android:background="@color/secondaryDarkColor"
+            android:visibility="visible" />
+
+
+        <CheckBox
+            android:id="@+id/feed_like_check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_64dp"
+            android:button="@drawable/ic_like_state"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/feed_content_background"
+            tools:checked="true" />
+
+        <TextView
+            android:id="@+id/feed_content_likes_text"
+            style="@style/FeedItemLikeTextStyle"
+            app:layout_constraintEnd_toEndOf="@+id/feed_like_check_box"
+            app:layout_constraintStart_toStartOf="@+id/feed_like_check_box"
+            app:layout_constraintTop_toBottomOf="@+id/feed_like_check_box"
+            tools:text="24 likes" />
+
+        <TextView
+            android:id="@+id/feed_caption_text"
+            style="@style/FeedItemCaptionStyle"
+            app:layout_constraintBottom_toTopOf="@+id/feed_uploaded_time_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="No caption" />
+
+        <TextView
+            android:id="@+id/feed_uploaded_time_tv"
+            style="@style/feedItemTimeStyle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="10 MINUTES AGO" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

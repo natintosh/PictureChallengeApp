@@ -36,6 +36,10 @@ public class ImageBitmapViewModel extends ViewModel {
         return originalBitmap;
     }
 
+    public Bitmap getBitmap() {
+        return originalBitmap.getValue();
+    }
+
     public MutableLiveData<Bitmap> getCroppedBitmap() {
         return croppedBitmap;
     }

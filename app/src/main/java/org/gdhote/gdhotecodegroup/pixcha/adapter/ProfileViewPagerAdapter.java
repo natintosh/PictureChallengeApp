@@ -2,6 +2,7 @@ package org.gdhote.gdhotecodegroup.pixcha.adapter;
 
 import org.gdhote.gdhotecodegroup.pixcha.fragment.ProfileImageGridFragment;
 import org.gdhote.gdhotecodegroup.pixcha.fragment.ProfileImageListFragment;
+import org.gdhote.gdhotecodegroup.pixcha.model.User;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -14,10 +15,10 @@ public class ProfileViewPagerAdapter extends FragmentPagerAdapter {
 
     private final ProfileImageListFragment profileImageListFragment;
 
-    public ProfileViewPagerAdapter(FragmentManager fm) {
+    public ProfileViewPagerAdapter(FragmentManager fm, User user) {
         super(fm);
-        profileImageGridFragment = new ProfileImageGridFragment();
-        profileImageListFragment = new ProfileImageListFragment();
+        profileImageGridFragment = ProfileImageGridFragment.newInstance(user);
+        profileImageListFragment = ProfileImageListFragment.newInstance(user);
     }
 
     @Override

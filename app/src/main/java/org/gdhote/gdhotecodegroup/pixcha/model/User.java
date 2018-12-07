@@ -3,7 +3,9 @@ package org.gdhote.gdhotecodegroup.pixcha.model;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private String id;
     private String profileImageUrl;

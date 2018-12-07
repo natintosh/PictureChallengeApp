@@ -9,4 +9,4 @@
     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
     app:spanCount="3"
     tools:context=".fragment.ProfileImageGridFragment"
-    tools:listitem="@layout/profile_image_grid_item" />
+    tools:listitem="@layout/grid_item_profile_image" />

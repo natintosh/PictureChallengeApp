@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">Pixcha</string>
+    <string name="search_hint">Search users</string>
+    <string name="title_activity_searchable">Search users</string>
+    <string name="content_description_switch_flash">Switch between flash</string>
+    <string name="content_description_capture_photo">Capture photo</string>
+    <string name="content_description_switch_cameras">Switch between cameras</string>
+    <string name="content_description_swipe_up_for_image_selection">Swipe up for image selection</string>
+    <string name="report_dialog_title">Report Post</string>
+    <string name="report_dialog_hint">Type your comment</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="feed_image">Feed image</string>
+    <string name="caption">Caption</string>
+    <string name="post">Post</string>
+    <string name="no_result_found">No result found</string>
 
 </resources>

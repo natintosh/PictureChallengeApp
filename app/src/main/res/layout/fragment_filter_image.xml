@@ -21,29 +21,29 @@
                 android:id="@+id/filter_square_image_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:src="@tools:sample/backgrounds/scenic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/backgrounds/scenic" />
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/filter_image_list_rv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginRight="4dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginStart="@dimen/margin_4dp"
+                android:layout_marginLeft="@dimen/margin_4dp"
+                android:layout_marginTop="@dimen/margin_16dp"
+                android:layout_marginEnd="@dimen/margin_4dp"
+                android:layout_marginRight="@dimen/margin_4dp"
+                android:layout_marginBottom="@dimen/margin_16dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/filter_square_image_view"
-                tools:listitem="@layout/filter_thumbnail_list_item" />
+                tools:listitem="@layout/list_item_filter_thumbnail" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="@dimen/margin_4dp"
         android:gravity="bottom"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -63,26 +63,28 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/filter_image_caption_text_layout"
+            android:theme="@style/AppGeneralEditTextTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
+            android:layout_marginStart="@dimen/margin_32dp"
+            android:layout_marginLeft="@dimen/margin_32dp"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_32dp"
+            android:layout_marginRight="@dimen/margin_32dp"
             app:counterEnabled="true"
             app:counterMaxLength="150">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/filter_image_caption_edit_text"
                 android:layout_width="match_parent"
+                android:theme="@style/AppGeneralEditTextTheme"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginRight="4dp"
-                android:hint="Caption"
+                android:layout_marginStart="@dimen/margin_4dp"
+                android:layout_marginLeft="@dimen/margin_4dp"
+                android:layout_marginTop="@dimen/margin_4dp"
+                android:layout_marginEnd="@dimen/margin_4dp"
+                android:layout_marginRight="@dimen/margin_4dp"
+                android:hint="@string/caption"
                 android:inputType="text"
                 android:maxLength="150" />
         </com.google.android.material.textfield.TextInputLayout>

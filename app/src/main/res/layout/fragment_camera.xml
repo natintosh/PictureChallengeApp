@@ -20,7 +20,7 @@
     </com.otaliastudios.cameraview.CameraView>
 
     <include
-        layout="@layout/camera_controls"
+        layout="@layout/layout_camera_controls"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />

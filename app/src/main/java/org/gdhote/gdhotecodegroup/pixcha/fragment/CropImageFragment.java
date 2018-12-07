@@ -10,7 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -36,10 +35,10 @@ public class CropImageFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static CropImageFragment newInstance(int param1, Uri uri) {
+    public static CropImageFragment newInstance(int mFragmentCase, Uri uri) {
         CropImageFragment fragment = new CropImageFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_FRAGMENT_CASE, param1);
+        args.putInt(ARG_FRAGMENT_CASE, mFragmentCase);
         args.putParcelable(ARG_IMAGE_URI, uri);
         fragment.setArguments(args);
         return fragment;
@@ -121,10 +120,18 @@ public class CropImageFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.crop_image_fragment_menu, menu);
+
+        if (mFragmentCase == 1) {
+            MenuItem skipItem  = menu.findItem(R.id.skip_crop_image_menu);
+            skipItem.setVisible(false);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Bitmap bitmap;
+        ImageBitmapViewModel imageBitmapViewModel = ViewModelProviders.of(getActivity()).get(ImageBitmapViewModel.class);
+
         switch (item.getItemId()) {
             case R.id.flip_crop_image_menu:
                 cropImageView.flipImageHorizontally();
@@ -132,17 +139,20 @@ public class CropImageFragment extends Fragment {
             case R.id.rotate_crop_image_menu:
                 cropImageView.rotateImage(DEGREES_OF_ROTATION);
                 return true;
-            case R.id.crop_crop_image_menu:
-                Bitmap bitmap = cropImageView.getCroppedImage();
+            case R.id.skip_crop_image_menu:
+                bitmap = imageBitmapViewModel.getBitmap();
+                imageBitmapViewModel.setCroppedBitmap(bitmap);
+                mCallBack.onProceed(CameraActivity.FILTER_IMAGE_FRAGMENT_TRANSACTION_ID);
 
+                return true;
+            case R.id.crop_crop_image_menu:
+                bitmap = cropImageView.getCroppedImage();
                 if (mFragmentCase == 0) {
-                    ImageBitmapViewModel imageBitmapViewModel = ViewModelProviders.of(getActivity()).get(ImageBitmapViewModel.class);
                     imageBitmapViewModel.setCroppedBitmap(bitmap);
                     mCallBack.onProceed(CameraActivity.FILTER_IMAGE_FRAGMENT_TRANSACTION_ID);
                 }
                 if (mFragmentCase == 1) {
                     ViewModelProviders.of(getActivity()).get(EditProfileViewModel.class).setProfilePicture(bitmap);
-                    Toast.makeText(getContext(), ViewModelProviders.of(getActivity()).get(EditProfileViewModel.class).getDisplayName(), Toast.LENGTH_SHORT).show();
                     onEditProfileCropMenuSelected();
                 }
                 return true;

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/feed_popup_report_action_menu"
+        android:icon="@drawable/ic_report"
+        android:orderInCategory="100"
+        android:title="Report"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/feed_popup_more_menu"
+        android:icon="@drawable/ic_more_vert_black"
+        android:orderInCategory="200"
+        android:title="More"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/feed_popup_delete_action_menu"
+                android:icon="@drawable/ic_delete"
+                android:orderInCategory="100"
+                android:title="Delete"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
+
+</menu>

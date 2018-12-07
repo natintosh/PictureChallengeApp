@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -38,8 +38,28 @@ public class ProfileImageGridFragment extends Fragment implements ProfileGridAda
     }
 
     private RecyclerView mRecyclerView;
+    private ProfileGridAdapter gridListAdapter;
     private List<FeedPost> feedList;
-    private ListenerRegistration feedQueryListenerReg;
+
+    private static String ARG_USER = "user";
+
+    public static ProfileImageGridFragment newInstance(User user) {
+        ProfileImageGridFragment fragment = new ProfileImageGridFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_USER, user);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private User user;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            user = (User) getArguments().getSerializable(ARG_USER);
+        }
+    }
 
     @Nullable
     @Override
@@ -47,20 +67,22 @@ public class ProfileImageGridFragment extends Fragment implements ProfileGridAda
         View view = inflater.inflate(R.layout.fragment_profile_image_grid, container, false);
 
         mRecyclerView = view.findViewById(R.id.profile_grid_rv);
-        final ProfileGridAdapter gridListAdapter = new ProfileGridAdapter(this, getContext());
+        gridListAdapter = new ProfileGridAdapter(this, getContext());
         mRecyclerView.setAdapter(gridListAdapter);
 
+        fetchDataIntoGridAdapter();
 
-        User user = CurrentUser.getInstance();
+        return view;
+    }
+
+    private void fetchDataIntoGridAdapter() {
+        User user = (this.user != null ? this.user : CurrentUser.getInstance());
         FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
         CollectionReference colRef = firestoreDb.collection("uploads");
-
         Query query = colRef.orderBy("uploadedAt", Query.Direction.DESCENDING).whereEqualTo("uploadedBy", user.getId());
-
-        feedQueryListenerReg = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                if (e != null) return;
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
                 feedList = new ArrayList<>();
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
@@ -69,15 +91,18 @@ public class ProfileImageGridFragment extends Fragment implements ProfileGridAda
 
                 gridListAdapter.setDataSet(feedList);
             }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "failed to update list", Toast.LENGTH_SHORT).show();
+            }
         });
-
-        return view;
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        feedQueryListenerReg.remove();
+    public void onResume() {
+        super.onResume();
+        fetchDataIntoGridAdapter();
     }
 
     @Override
@@ -88,7 +113,7 @@ public class ProfileImageGridFragment extends Fragment implements ProfileGridAda
 
     @Override
     public void onListItemLongClick(int position, Bitmap bitmap) {
-        View imageDialog = getLayoutInflater().inflate(R.layout.custom_image_dialog, null);
+        View imageDialog = getLayoutInflater().inflate(R.layout.dialog_custom_image, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         SquareImageView imageView = imageDialog.findViewById(R.id.custom_image_dialog_image);
         imageView.setImageBitmap(bitmap);

@@ -9,4 +9,8 @@
     <color name="primaryTextColor">#ffffff</color>
     <color name="secondaryTextColor">#ffffff</color>
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="lightDarkTextColor">#484848</color>
+    <color name="darkDarkTextColor">#212121</color>
+    <color name="lightGreyColor">#C5C5C5</color>
 </resources>

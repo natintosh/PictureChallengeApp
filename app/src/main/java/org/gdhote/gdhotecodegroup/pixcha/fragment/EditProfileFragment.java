@@ -24,7 +24,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import org.gdhote.gdhotecodegroup.pixcha.R;
-import org.gdhote.gdhotecodegroup.pixcha.activity.MainActivity;
 import org.gdhote.gdhotecodegroup.pixcha.model.CurrentUser;
 import org.gdhote.gdhotecodegroup.pixcha.ui.CircularImageView;
 import org.gdhote.gdhotecodegroup.pixcha.utils.GlideApp;
@@ -44,8 +43,31 @@ public class EditProfileFragment extends Fragment implements BSImagePicker.OnSin
 
     private int mFragmentCase;
 
-    private OnSubmitButtonClickListener mSubmitButtonCallback;
-    private OnLoadCropFragment mLoadCropFragmentCallback;
+    private OnEditProfileListener mEditProfileCallback;
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnEditProfileListener) {
+            mEditProfileCallback = (OnEditProfileListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnSubmitButtonClickListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mEditProfileCallback = null;
+    }
+
+    public interface OnEditProfileListener {
+        void onSubmitButtonClick();
+
+        void onLoadCropFragment(Uri uri);
+    }
 
     public EditProfileFragment() {
         // Required empty public constructor
@@ -75,6 +97,7 @@ public class EditProfileFragment extends Fragment implements BSImagePicker.OnSin
     private FirebaseUser firebaseUser;
     private EditProfileViewModel profileViewModel;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -82,7 +105,6 @@ public class EditProfileFragment extends Fragment implements BSImagePicker.OnSin
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
         profileViewModel = ViewModelProviders.of(getActivity()).get(EditProfileViewModel.class);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        MainActivity.isAwayFromNav = true;
 
         if (mFragmentCase == 0) {
             getActivity().setTitle("Update profile");
@@ -126,13 +148,26 @@ public class EditProfileFragment extends Fragment implements BSImagePicker.OnSin
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Bitmap bitmap = ViewModelProviders.of(getActivity()).get(EditProfileViewModel.class).getBitmap();
+        if (bitmap != null) {
+            profileImageView.setImageBitmap(bitmap);
+        } else {
+            GlideApp.with(this)
+                    .asBitmap()
+                    .placeholder(new ColorDrawable(Color.LTGRAY))
+                    .load(profileViewModel.getProfilePictureUrl())
+                    .into(profileImageView);
+        }
+    }
+
     private void shouldShowAppBar(Boolean shouldShow) {
         if (shouldShow) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-            MainActivity.bottomNavigationView.setVisibility(View.GONE);
         } else {
             ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-            MainActivity.bottomNavigationView.setVisibility(View.GONE);
         }
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(shouldShow);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(shouldShow);
@@ -152,15 +187,10 @@ public class EditProfileFragment extends Fragment implements BSImagePicker.OnSin
                 profileImageView.setImageBitmap(bitmap);
             }
         });
+
         displayNameEditText.setText(profileViewModel.getDisplayName());
         emailAddressEditText.setText(profileViewModel.getEmailAddress());
         bioEditText.setText(profileViewModel.getBio());
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        newInstance(mFragmentCase);
     }
 
     private void initialiseViews(View view) {
@@ -195,42 +225,18 @@ public class EditProfileFragment extends Fragment implements BSImagePicker.OnSin
     }
 
     public void onButtonPressed() {
-        if (mSubmitButtonCallback != null) {
-            mSubmitButtonCallback.onSubmitButtonClick();
+        if (mEditProfileCallback != null) {
+            mEditProfileCallback.onSubmitButtonClick();
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnSubmitButtonClickListener) {
-            mSubmitButtonCallback = (OnSubmitButtonClickListener) context;
-            mLoadCropFragmentCallback = (OnLoadCropFragment) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnSubmitButtonClickListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mSubmitButtonCallback = null;
-        mLoadCropFragmentCallback = null;
     }
 
     @Override
     public void onSingleImageSelected(Uri uri) {
-        mLoadCropFragmentCallback.onLoadCropFragment(uri);
+        if (mEditProfileCallback != null) {
+            mEditProfileCallback.onLoadCropFragment(uri);
+        }
     }
 
-    public interface OnSubmitButtonClickListener {
-        void onSubmitButtonClick();
-    }
-
-    public interface OnLoadCropFragment {
-        void onLoadCropFragment(Uri uri);
-    }
 
     private void requestFocus(View view) {
         if (view.requestFocus()) {
