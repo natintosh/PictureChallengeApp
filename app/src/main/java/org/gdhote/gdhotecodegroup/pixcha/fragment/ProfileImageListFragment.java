@@ -108,20 +108,16 @@ public class ProfileImageListFragment extends Fragment implements ProfileListAda
         Query query = colRef.orderBy("uploadedAt", Query.Direction.DESCENDING).whereEqualTo("uploadedBy", user.getId());
 
 
-        query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        query.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if (e != null) return;
+
                 feedList = new ArrayList<>();
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     feedList.add(documentSnapshot.toObject(FeedPost.class));
                 }
                 listAdapter.setDataSet(feedList);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), "failed to update list", Toast.LENGTH_SHORT).show();
-                Log.d(ProfileImageListFragment.class.getSimpleName(), e.getMessage());
             }
         });
     }
@@ -194,6 +190,8 @@ public class ProfileImageListFragment extends Fragment implements ProfileListAda
         final CollectionReference uploadscolRef = firestoreDb.collection("uploads");
         final DocumentReference feedDocRef = uploadscolRef.document(post.getId());
         final CollectionReference likesColRef = feedDocRef.collection("likes");
+        final CollectionReference commentsColRef = feedDocRef.collection("comments");
+
         PopupMenu popupMenu = new PopupMenu(getContext(), popUpButton);
         popupMenu.getMenuInflater().inflate(R.menu.feeds_popup_menu, popupMenu.getMenu());
         if (user != null) {
@@ -269,12 +267,26 @@ public class ProfileImageListFragment extends Fragment implements ProfileListAda
                                                             batch.delete(snapshot.getReference());
                                                         }
                                                     }
-                                                    batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                                                    commentsColRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                         @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                                                            if (task.isSuccessful() || !task.getResult().isEmpty()) {
+                                                                for (DocumentSnapshot snapshot : task.getResult()) {
+                                                                    batch.delete(snapshot.getReference());
+                                                                }
+                                                            }
+
+                                                            batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            });
                                                         }
                                                     });
+
                                                 }
                                             });
                                         }

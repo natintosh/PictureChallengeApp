@@ -126,7 +126,6 @@ public class SearchActivity extends AppCompatActivity implements SearchListAdapt
 
     @Override
     public void onItemClickListener(int position) {
-        Toast.makeText(this, queryResults.get(position).getDisplayName(), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, ProfileActivity.class);
         intent.putExtra(ProfileActivity.USER_ID_INTENT_EXTRA, queryResults.get(position).getId());
         startActivity(intent);

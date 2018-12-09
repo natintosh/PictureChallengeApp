@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/edit_popup_remove_image_menu"
+        android:orderInCategory="100"
+        android:title="Remove Profile Image"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/edit_popup_edit_profile_menu"
+        android:icon="@drawable/ic_more_vert"
+        android:orderInCategory="200"
+        android:title="Edit Profile"
+        app:showAsAction="always" />
+</menu>

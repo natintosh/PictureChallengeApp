@@ -48,7 +48,7 @@ public class ProfileFragment extends Fragment {
     private static final String ARG_FRAGMENT_TYPE = "fragment-type";
 
     public interface SetProfileFragmentListeners {
-        void onProfileDetailsEditButtonClick();
+        void onProfileDetailsEditButtonClick(FloatingActionButton editProfileButton, CircularImageView profileImage);
 
         void onSignOutMenuClick();
     }
@@ -173,7 +173,7 @@ public class ProfileFragment extends Fragment {
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openEditProfileFragment();
+                openEditProfileFragment((FloatingActionButton) v, profileImage);
             }
         });
 
@@ -181,9 +181,9 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    private void openEditProfileFragment() {
+    private void openEditProfileFragment(FloatingActionButton editProfileButton, CircularImageView profileImage) {
         if (mProfileFragmentCallback != null) {
-            mProfileFragmentCallback.onProfileDetailsEditButtonClick();
+            mProfileFragmentCallback.onProfileDetailsEditButtonClick(editProfileButton, profileImage);
         }
     }
 

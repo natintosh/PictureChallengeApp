@@ -16,7 +16,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -71,6 +70,7 @@ public class FeedsFragment extends Fragment implements FeedsListAdapter.SetFeedL
         // Required empty public constructor
     }
 
+    public static RecyclerView feedsRecyclerView;
     private List<FeedPost> feedList;
     private FeedsListAdapter feedsListAdapter;
     private ListenerRegistration feedQueryListenerReg;
@@ -100,7 +100,7 @@ public class FeedsFragment extends Fragment implements FeedsListAdapter.SetFeedL
         MainActivity.activeFragment = this;
 
 
-        RecyclerView feedsRecyclerView = view.findViewById(R.id.feeds_list);
+        feedsRecyclerView = view.findViewById(R.id.feeds_list);
         feedSwipeRefreshLayout = view.findViewById(R.id.feed_swipe_refresh);
         feedsListAdapter = new FeedsListAdapter(getContext(), this);
         feedsRecyclerView.setAdapter(feedsListAdapter);
@@ -268,6 +268,8 @@ public class FeedsFragment extends Fragment implements FeedsListAdapter.SetFeedL
         final CollectionReference uploadscolRef = firestoreDb.collection("uploads");
         final DocumentReference feedDocRef = uploadscolRef.document(post.getId());
         final CollectionReference likesColRef = feedDocRef.collection("likes");
+        final CollectionReference commentsColRef = feedDocRef.collection("comments");
+
         PopupMenu popupMenu = new PopupMenu(getContext(), popUpButton);
         popupMenu.getMenuInflater().inflate(R.menu.feeds_popup_menu, popupMenu.getMenu());
         if (user != null) {
@@ -343,12 +345,26 @@ public class FeedsFragment extends Fragment implements FeedsListAdapter.SetFeedL
                                                             batch.delete(snapshot.getReference());
                                                         }
                                                     }
-                                                    batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                                                    commentsColRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                         @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                                                            if (task.isSuccessful() || !task.getResult().isEmpty()) {
+                                                                for (DocumentSnapshot snapshot : task.getResult()) {
+                                                                    batch.delete(snapshot.getReference());
+                                                                }
+                                                            }
+
+                                                            batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    Toast.makeText(getContext(), "Deleted", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            });
                                                         }
                                                     });
+
                                                 }
                                             });
                                         }

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 public class ImageBitmapViewModel extends ViewModel {
 
     private MutableLiveData<Bitmap> originalBitmap;
+    private Bitmap bitmap;
     private MutableLiveData<Bitmap> croppedBitmap;
     private MutableLiveData<Bitmap> filteredBitmap;
 
@@ -18,10 +19,16 @@ public class ImageBitmapViewModel extends ViewModel {
         originalBitmap.setValue(null);
         croppedBitmap.setValue(null);
         filteredBitmap.setValue(null);
+
+        bitmap = null;
     }
 
     public void setOriginalBitmap(Bitmap bitmap) {
         this.originalBitmap.setValue(bitmap);
+    }
+
+    private void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 
     public void setCroppedBitmap(Bitmap bitmap) {

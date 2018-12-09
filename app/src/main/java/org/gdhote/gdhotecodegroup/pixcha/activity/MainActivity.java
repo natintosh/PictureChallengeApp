@@ -1,6 +1,11 @@
 package org.gdhote.gdhotecodegroup.pixcha.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,27 +14,42 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.gdhote.gdhotecodegroup.pixcha.R;
 import org.gdhote.gdhotecodegroup.pixcha.fragment.FeedsFragment;
 import org.gdhote.gdhotecodegroup.pixcha.fragment.ProfileFragment;
 import org.gdhote.gdhotecodegroup.pixcha.fragment.SignInFragment;
+import org.gdhote.gdhotecodegroup.pixcha.model.CurrentUser;
+import org.gdhote.gdhotecodegroup.pixcha.ui.CircularImageView;
+import org.gdhote.gdhotecodegroup.pixcha.utils.GlideApp;
 import org.gdhote.gdhotecodegroup.pixcha.utils.UserHelper;
 import org.gdhote.gdhotecodegroup.pixcha.viewmodel.EditProfileViewModel;
 import org.gdhote.gdhotecodegroup.pixcha.viewmodel.MainActivityNavigationViewModel;
 import org.gdhote.gdhotecodegroup.pixcha.viewmodel.UserUploadsViewModel;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -156,6 +176,8 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.On
                                 loadFragment(mFeedsFragment, true);
                                 activeFragment = mFeedsFragment;
                                 navigationViewModel.setPosition(FEED_POSTION);
+                            } else {
+                                FeedsFragment.feedsRecyclerView.smoothScrollToPosition(0);
                             }
                             return true;
                         case R.id.nav_action_camera:
@@ -249,10 +271,85 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.On
     }
 
     @Override
-    public void onProfileDetailsEditButtonClick() {
-        Intent intent = new Intent(this, EditProfileActivity.class);
-        intent.putExtra(EditProfileActivity.EDIT_PROFILE_TYPE_INTENT_EXTRA, EditProfileActivity.TYPE_EDIT_PROFILE);
-        startActivity(intent);
+    public void onProfileDetailsEditButtonClick(FloatingActionButton editProfileButton, final CircularImageView profileImage) {
+        PopupMenu popupMenu = new PopupMenu(this, editProfileButton);
+        popupMenu.getMenuInflater().inflate(R.menu.edit_profile_popup_menu, popupMenu.getMenu());
+        if (CurrentUser.getInstance() != null) {
+            popupMenu.show();
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    int id = item.getItemId();
+                    switch (id) {
+                        case R.id.edit_popup_remove_image_menu:
+                            removeProfilePicture(profileImage);
+                            break;
+                        case R.id.edit_popup_edit_profile_menu:
+                            Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
+                            intent.putExtra(EditProfileActivity.EDIT_PROFILE_TYPE_INTENT_EXTRA, EditProfileActivity.TYPE_EDIT_PROFILE);
+                            startActivity(intent);
+                            break;
+                    }
+                    return false;
+                }
+            });
+        }
+    }
+
+    private void removeProfilePicture(final CircularImageView profileImage) {
+        final FirebaseStorage storage = FirebaseStorage.getInstance();
+        final StorageReference rootStorageReference = storage.getReference();
+        final StorageReference profileImagesStorageRef = rootStorageReference.child("profile_images");
+        final String fileName = "image" + "_" + CurrentUser.getInstance().getId() + ".jpg";
+        final StorageReference fileRef = profileImagesStorageRef.child(fileName);
+
+        String documentId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
+        CollectionReference usersCollectionRef = firestoreDb.collection("users");
+        final DocumentReference userDocumentRef = usersCollectionRef.document(documentId);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.no_image_available);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+        byte[] data = baos.toByteArray();
+
+        final UploadTask uploadTask = fileRef.putBytes(data);
+        Task<Uri> task = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                return fileRef.getDownloadUrl();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String fileUrl = uri.toString();
+
+                final CurrentUser currentUser = CurrentUser.getInstance();
+                currentUser.setProfileImageUrl(fileUrl);
+
+                userDocumentRef.set(currentUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        GlideApp.with(MainActivity.this)
+                                .asBitmap()
+                                .load(currentUser.getProfileImageUrl())
+                                .placeholder(new ColorDrawable(Color.LTGRAY))
+                                .into(profileImage);
+                        Toast.makeText(MainActivity.this, "successfully written!", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(
+                                MainActivity.this, "Unknown error occurred", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
     @Override

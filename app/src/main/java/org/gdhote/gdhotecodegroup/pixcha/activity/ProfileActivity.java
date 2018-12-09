@@ -2,15 +2,16 @@ package org.gdhote.gdhotecodegroup.pixcha.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.gdhote.gdhotecodegroup.pixcha.R;
 import org.gdhote.gdhotecodegroup.pixcha.fragment.ProfileFragment;
 import org.gdhote.gdhotecodegroup.pixcha.model.User;
+import org.gdhote.gdhotecodegroup.pixcha.ui.CircularImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -67,7 +68,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileFragmen
     }
 
     @Override
-    public void onProfileDetailsEditButtonClick() {
+    public void onProfileDetailsEditButtonClick(FloatingActionButton editProfileButton, CircularImageView profileImage) {
 
     }
 

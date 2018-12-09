@@ -2,6 +2,7 @@ package org.gdhote.gdhotecodegroup.pixcha.fragment;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -140,16 +141,15 @@ public class CropImageFragment extends Fragment {
                 cropImageView.rotateImage(DEGREES_OF_ROTATION);
                 return true;
             case R.id.skip_crop_image_menu:
-                bitmap = imageBitmapViewModel.getBitmap();
+                cropImageView.clearAspectRatio();
+                cropImageView.setCropRect(new Rect(0, 0, Integer.MAX_VALUE, Integer.MAX_VALUE));
+                bitmap = cropImageView.getCroppedImage();
                 imageBitmapViewModel.setCroppedBitmap(bitmap);
                 mCallBack.onProceed(CameraActivity.FILTER_IMAGE_FRAGMENT_TRANSACTION_ID);
-
                 return true;
             case R.id.crop_crop_image_menu:
                 bitmap = cropImageView.getCroppedImage();
                 if (mFragmentCase == 0) {
-                    imageBitmapViewModel.setCroppedBitmap(bitmap);
-                    mCallBack.onProceed(CameraActivity.FILTER_IMAGE_FRAGMENT_TRANSACTION_ID);
                 }
                 if (mFragmentCase == 1) {
                     ViewModelProviders.of(getActivity()).get(EditProfileViewModel.class).setProfilePicture(bitmap);

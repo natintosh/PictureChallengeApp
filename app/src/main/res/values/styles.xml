@@ -169,16 +169,9 @@
         <item name="android:layout_height">@dimen/size_0dp</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
-        <item name="android:visibility">gone</item>
+        <item name="android:visibility">visible</item>
     </style>
 
-    <style name="FeedItemLikeTextStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/margin_8dp</item>
-        <item name="android:textColor">@color/browser_actions_bg_grey</item>
-        <item name="android:textSize">@dimen/text_size_18sp</item>
-    </style>
 
     <style name="FeedItemCaptionStyle">
         <item name="android:layout_width">wrap_content</item>
@@ -193,14 +186,10 @@
         <item name="android:textSize">@dimen/text_size_12sp</item>
     </style>
 
-    <style name="feedItemTimeStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginEnd">@dimen/margin_8dp</item>
-        <item name="android:layout_marginRight">@dimen/margin_8dp</item>
-        <item name="android:layout_marginBottom">@dimen/margin_8dp</item>
+    <style name="CaptionTextStyle">
         <item name="android:textColor">@color/browser_actions_bg_grey</item>
         <item name="android:textSize">@dimen/text_size_12sp</item>
+
     </style>
 
 

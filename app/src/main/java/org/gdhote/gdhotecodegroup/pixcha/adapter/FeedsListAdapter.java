@@ -98,6 +98,7 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
         final CollectionReference uploadscolRef = firestoreDb.collection("uploads");
         final DocumentReference feedDocRef = uploadscolRef.document(post.getId());
         final CollectionReference likesColRef = feedDocRef.collection("likes");
+        final CollectionReference commentColRef = feedDocRef.collection("comments");
 
         DocumentReference userDocRef = firestoreDb.collection("users").document(post.getUploadedBy());
 
@@ -165,6 +166,17 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
                         int likesNo = queryDocumentSnapshots.size();
                         String likes = (likesNo <= 1 ? likesNo + " like" : likesNo + " likes");
                         holder.likesNoText.setText(likes);
+                    }
+                });
+
+                commentColRef.addSnapshotListener((Activity) context, new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) return;
+
+                        int commentNo = queryDocumentSnapshots.size();
+                        String comments = (commentNo <= 1 ? commentNo + " comment" : commentNo + " comments");
+                        holder.commentText.setText(comments);
                     }
                 });
 
@@ -250,6 +262,7 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
         private TextView feedCaptionText;
         private TextView likesNoText;
         private TextView timeText;
+        private TextView commentText;
         private View contentBg;
         private ImageButton popupButton;
 
@@ -264,6 +277,7 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
             feedCaptionText = itemView.findViewById(R.id.feed_caption_text);
             likesNoText = itemView.findViewById(R.id.feed_content_likes_text);
             timeText = itemView.findViewById(R.id.feed_uploaded_time_tv);
+            commentText = itemView.findViewById(R.id.feed_comment_text);
             contentBg = itemView.findViewById(R.id.feed_content_background);
             popupButton = itemView.findViewById(R.id.feed_popup_menu_btn);
         }
