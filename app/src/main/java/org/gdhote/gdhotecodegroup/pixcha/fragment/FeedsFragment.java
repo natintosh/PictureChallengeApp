@@ -70,8 +70,8 @@ public class FeedsFragment extends Fragment implements FeedsListAdapter.SetFeedL
         // Required empty public constructor
     }
 
-    public static RecyclerView feedsRecyclerView;
-    private List<FeedPost> feedList;
+    private static RecyclerView feedsRecyclerView;
+    private static List<FeedPost> feedList;
     private FeedsListAdapter feedsListAdapter;
     private ListenerRegistration feedQueryListenerReg;
     private SwipeRefreshLayout feedSwipeRefreshLayout;
@@ -167,6 +167,16 @@ public class FeedsFragment extends Fragment implements FeedsListAdapter.SetFeedL
         super.onStop();
         if (feedQueryListenerReg != null) {
             feedQueryListenerReg.remove();
+        }
+    }
+
+    private static List<FeedPost> getFeeds() {
+        return feedList;
+    }
+
+    public static void scrollToTop() {
+        if (!getFeeds().isEmpty() && getFeeds() != null) {
+            feedsRecyclerView.smoothScrollToPosition(0);
         }
     }
 

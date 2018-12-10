@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "191737695763-uj9r03sk27t98gojl4b1qqg04gq9t7ja.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.gdhote.gdhotecodegroup.pixcha",
+            "certificate_hash": "9eacd9433e16b8fe953b4df9f57381b7b8e2b8ec"
+          }
+        },
+        {
           "client_id": "191737695763-1as91fo16b5gjjlrq0cdlopdi1vf96mc.apps.googleusercontent.com",
           "client_type": 3
         }

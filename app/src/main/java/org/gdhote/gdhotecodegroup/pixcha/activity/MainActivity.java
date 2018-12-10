@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.On
         ProfileFragment.SetProfileFragmentListeners {
 
     private static final int RC_SIGN_IN = 1001;
-    public static final String TAG = MainActivity.class.getSimpleName();
     private final int FEED_POSTION = 0;
     private final int CAMERA_POSITION = 1;
     private final int PROFILE_POSITION = 2;
@@ -119,12 +118,6 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.On
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        int selectedItemId = bottomNavigationView.getMenu().getItem(navigationViewModel.getPosition()).getItemId();
-        bottomNavigationView.setSelectedItemId(selectedItemId);
-    }
 
     private void loadFragment(Fragment fragment, boolean addToBackStack) {
         // load fragment
@@ -177,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.On
                                 activeFragment = mFeedsFragment;
                                 navigationViewModel.setPosition(FEED_POSTION);
                             } else {
-                                FeedsFragment.feedsRecyclerView.smoothScrollToPosition(0);
+                                FeedsFragment.scrollToTop();
                             }
                             return true;
                         case R.id.nav_action_camera:
@@ -218,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.On
                     setNavigationViewVisibility(false);
                 } else {
                     // This is an existing user, show them a welcome back screen.
+                    UserHelper.updateCurrentUser();
                     loadFragment(mFeedsFragment, false);
                     // Set navigation visibility
                     setNavigationViewVisibility(true);
@@ -339,13 +333,12 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.On
                                 .load(currentUser.getProfileImageUrl())
                                 .placeholder(new ColorDrawable(Color.LTGRAY))
                                 .into(profileImage);
-                        Toast.makeText(MainActivity.this, "successfully written!", Toast.LENGTH_SHORT).show();
+                        makeToast("successfully written!");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(
-                                MainActivity.this, "Unknown error occurred", Toast.LENGTH_SHORT).show();
+                        makeToast("Unknown error occurred");
                     }
                 });
             }

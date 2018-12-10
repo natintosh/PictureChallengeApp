@@ -1,6 +1,7 @@
 package org.gdhote.gdhotecodegroup.pixcha.utils;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -11,6 +12,8 @@ import com.google.firebase.firestore.Source;
 
 import org.gdhote.gdhotecodegroup.pixcha.model.CurrentUser;
 import org.gdhote.gdhotecodegroup.pixcha.model.User;
+
+import androidx.annotation.NonNull;
 
 public class UserHelper {
 
@@ -25,16 +28,18 @@ public class UserHelper {
 
             Source source = Source.CACHE;
 
-            userDocumentRef.get(source).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            userDocumentRef.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    User user = documentSnapshot.toObject(User.class);
-                    CurrentUser currentUser = CurrentUser.getInstance();
-                    currentUser.setId(user.getId());
-                    currentUser.setDisplayName(user.getDisplayName());
-                    currentUser.setEmailAddress(user.getEmailAddress());
-                    currentUser.setBio(user.getBio());
-                    currentUser.setProfileImageUrl(user.getProfileImageUrl());
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        User user = task.getResult().toObject(User.class);
+                        CurrentUser currentUser = CurrentUser.getInstance();
+                        currentUser.setId(user.getId());
+                        currentUser.setDisplayName(user.getDisplayName());
+                        currentUser.setEmailAddress(user.getEmailAddress());
+                        currentUser.setBio(user.getBio());
+                        currentUser.setProfileImageUrl(user.getProfileImageUrl());
+                    }
                 }
             });
         }

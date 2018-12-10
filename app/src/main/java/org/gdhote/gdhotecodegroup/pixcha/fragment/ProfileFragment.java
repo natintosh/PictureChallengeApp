@@ -27,6 +27,7 @@ import org.gdhote.gdhotecodegroup.pixcha.model.CurrentUser;
 import org.gdhote.gdhotecodegroup.pixcha.model.User;
 import org.gdhote.gdhotecodegroup.pixcha.ui.CircularImageView;
 import org.gdhote.gdhotecodegroup.pixcha.utils.GlideApp;
+import org.gdhote.gdhotecodegroup.pixcha.utils.UserHelper;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -158,6 +159,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = getView() != null ? getView() : inflater.inflate(R.layout.fragment_profile, container, false);
+        UserHelper.updateCurrentUser();
         if (fragmentType == 0) {
             setNavigationViewVisibility(true);
             MainActivity.activeFragment = this;
@@ -190,7 +192,6 @@ public class ProfileFragment extends Fragment {
     private void signOut() {
         if (mProfileFragmentCallback != null) {
             mProfileFragmentCallback.onSignOutMenuClick();
-            ;
         }
     }
 
