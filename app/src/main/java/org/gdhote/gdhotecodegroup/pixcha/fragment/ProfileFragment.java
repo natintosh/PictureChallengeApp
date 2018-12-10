@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.EventListener;
@@ -175,7 +176,10 @@ public class ProfileFragment extends Fragment {
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openEditProfileFragment((FloatingActionButton) v, profileImage);
+                if (CurrentUser.getInstance() != null) {
+                    openEditProfileFragment((FloatingActionButton) v, profileImage);
+                } else
+                    Toast.makeText(getActivity(), "Unable perform action now.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -292,7 +296,10 @@ public class ProfileFragment extends Fragment {
             final int id = item.getItemId();
             switch (id) {
                 case R.id.profile_details_sign_out_menu:
-                    signOut();
+                    if (CurrentUser.getInstance() != null) {
+                        signOut();
+                    } else
+                        Toast.makeText(getActivity(), "Unable to sign out now ", Toast.LENGTH_SHORT).show();
                 default:
             }
         }
