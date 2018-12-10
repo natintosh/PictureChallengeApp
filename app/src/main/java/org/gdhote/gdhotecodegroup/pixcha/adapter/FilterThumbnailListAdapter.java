@@ -1,5 +1,8 @@
 package org.gdhote.gdhotecodegroup.pixcha.adapter;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,7 @@ import com.zomato.photofilters.utils.ThumbnailItem;
 
 import org.gdhote.gdhotecodegroup.pixcha.R;
 import org.gdhote.gdhotecodegroup.pixcha.ui.SquareImageView;
+import org.gdhote.gdhotecodegroup.pixcha.utils.GlideApp;
 
 import java.util.List;
 
@@ -20,12 +24,14 @@ import androidx.recyclerview.widget.RecyclerView;
 public class FilterThumbnailListAdapter extends RecyclerView.Adapter<FilterThumbnailListAdapter.FilterThumbnailListAdapterViewHolder> {
 
     private List<ThumbnailItem> thumbs;
+    private Context context;
 
     final ThumbnailCallback mCallback;
     private int lastPostion = -1;
 
-    public FilterThumbnailListAdapter(ThumbnailCallback thumbnailCallback) {
+    public FilterThumbnailListAdapter(ThumbnailCallback thumbnailCallback, Context context) {
         this.mCallback = thumbnailCallback;
+        this.context = context;
     }
 
     public void setThumbs(List<ThumbnailItem> thumbnailItems) {
@@ -46,7 +52,11 @@ public class FilterThumbnailListAdapter extends RecyclerView.Adapter<FilterThumb
 
 
         holder.filterImageNameTextView.setText(currentThumb.filterName);
-        holder.filterImageThumbnailImageView.setImageBitmap(currentThumb.image);
+        GlideApp.with(context)
+                .asBitmap()
+                .placeholder(new ColorDrawable(Color.LTGRAY))
+                .load(currentThumb.image)
+                .into(holder.filterImageThumbnailImageView);
     }
 
     @Override

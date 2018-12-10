@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -26,6 +27,7 @@ import org.gdhote.gdhotecodegroup.pixcha.activity.CameraActivity;
 import org.gdhote.gdhotecodegroup.pixcha.utils.OnSwipeTouchListener;
 import org.gdhote.gdhotecodegroup.pixcha.viewmodel.ImageBitmapViewModel;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import androidx.annotation.NonNull;
@@ -202,7 +204,13 @@ public class CameraFragment extends Fragment implements BSImagePicker.OnSingleIm
         ContentResolver contentResolver = getActivity().getContentResolver();
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri);
-            ViewModelProviders.of(getActivity()).get(ImageBitmapViewModel.class).setOriginalBitmap(bitmap);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+            byte[] data = baos.toByteArray();
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 2;
+            Bitmap compressedBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+            ViewModelProviders.of(getActivity()).get(ImageBitmapViewModel.class).setOriginalBitmap(compressedBitmap);
             mCallBack.onProceed(CameraActivity.CROP_IMAGE_FRAGMENT_TRANSACTION_ID);
         } catch (IOException e) {
             e.printStackTrace();

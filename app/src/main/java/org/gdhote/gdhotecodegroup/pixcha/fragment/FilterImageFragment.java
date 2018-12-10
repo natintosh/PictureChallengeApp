@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -96,7 +98,11 @@ public class FilterImageFragment extends Fragment implements ThumbnailCallback {
             @Override
             public void onChanged(Bitmap bitmap) {
                 croppedImageBitmap[0] = bitmap;
-                mSquareImage.setImageBitmap(bitmap);
+                GlideApp.with(mSquareImage)
+                        .asBitmap()
+                        .placeholder(new ColorDrawable(Color.LTGRAY))
+                        .load(bitmap)
+                        .into(mSquareImage);
             }
         });
 
@@ -117,7 +123,7 @@ public class FilterImageFragment extends Fragment implements ThumbnailCallback {
     private void bindDataToAdapter() {
         final Context context = getActivity();
         Handler handler = new Handler();
-        final FilterThumbnailListAdapter listAdapter = new FilterThumbnailListAdapter(this);
+        final FilterThumbnailListAdapter listAdapter = new FilterThumbnailListAdapter(this, context);
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -156,9 +162,13 @@ public class FilterImageFragment extends Fragment implements ThumbnailCallback {
     @Override
     public void onThumbnailClick(Filter filter) {
         if (filter != null) {
-            Bitmap filterBitmap = filter.processFilter(mBitmap.copy(Bitmap.Config.ARGB_8888,true));
+            Bitmap filterBitmap = filter.processFilter(mBitmap.copy(Bitmap.Config.ARGB_8888, true));
             mImageBitmapViewModel.setFilteredBitmap(filterBitmap);
-            mSquareImage.setImageBitmap(filterBitmap);
+            GlideApp.with(getActivity())
+                    .asBitmap()
+                    .placeholder(new ColorDrawable(Color.LTGRAY))
+                    .load(filterBitmap)
+                    .into(mSquareImage);
             sBitmap = filterBitmap;
         }
 

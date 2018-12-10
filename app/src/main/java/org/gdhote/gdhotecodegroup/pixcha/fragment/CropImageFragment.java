@@ -150,6 +150,8 @@ public class CropImageFragment extends Fragment {
             case R.id.crop_crop_image_menu:
                 bitmap = cropImageView.getCroppedImage();
                 if (mFragmentCase == 0) {
+                    imageBitmapViewModel.setCroppedBitmap(bitmap);
+                    mCallBack.onProceed(CameraActivity.FILTER_IMAGE_FRAGMENT_TRANSACTION_ID);
                 }
                 if (mFragmentCase == 1) {
                     ViewModelProviders.of(getActivity()).get(EditProfileViewModel.class).setProfilePicture(bitmap);
