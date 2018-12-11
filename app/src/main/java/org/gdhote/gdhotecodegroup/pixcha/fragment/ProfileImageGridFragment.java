@@ -1,6 +1,7 @@
 package org.gdhote.gdhotecodegroup.pixcha.fragment;
 
-import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import org.gdhote.gdhotecodegroup.pixcha.model.CurrentUser;
 import org.gdhote.gdhotecodegroup.pixcha.model.FeedPost;
 import org.gdhote.gdhotecodegroup.pixcha.model.User;
 import org.gdhote.gdhotecodegroup.pixcha.ui.SquareImageView;
+import org.gdhote.gdhotecodegroup.pixcha.utils.GlideApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,12 +110,18 @@ public class ProfileImageGridFragment extends Fragment implements ProfileGridAda
     }
 
     @Override
-    public void onListItemLongClick(int position, Bitmap bitmap) {
-        View imageDialog = getLayoutInflater().inflate(R.layout.dialog_custom_image, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        SquareImageView imageView = imageDialog.findViewById(R.id.custom_image_dialog_image);
-        imageView.setImageBitmap(bitmap);
-        builder.setView(imageDialog);
-        builder.show();
+    public void onListItemLongClick(int position, String imageUrl) {
+        if (imageUrl != null) {
+            View imageDialog = getLayoutInflater().inflate(R.layout.dialog_custom_image, null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            SquareImageView imageView = imageDialog.findViewById(R.id.custom_image_dialog_image);
+            GlideApp.with(this)
+                    .asBitmap()
+                    .placeholder(new ColorDrawable(Color.LTGRAY))
+                    .load(imageUrl)
+                    .into(imageView);
+            builder.setView(imageDialog);
+            builder.show();
+        }
     }
 }

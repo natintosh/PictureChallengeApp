@@ -1,9 +1,7 @@
 package org.gdhote.gdhotecodegroup.pixcha.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +25,7 @@ public class ProfileGridAdapter extends RecyclerView.Adapter<ProfileGridAdapter.
     public interface ListItemClickListener {
         void onListItemClick(int position);
 
-        void onListItemLongClick(int position, Bitmap bitmap);
+        void onListItemLongClick(int position, String imageUrl);
     }
 
     public ProfileGridAdapter(ListItemClickListener listItemClickListener, Context context) {
@@ -90,9 +88,7 @@ public class ProfileGridAdapter extends RecyclerView.Adapter<ProfileGridAdapter.
         @Override
         public boolean onLongClick(View v) {
             int position = getAdapterPosition();
-            SquareImageView imageView = (SquareImageView) v;
-            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-            onClickListener.onListItemLongClick(position, bitmap);
+            onClickListener.onListItemLongClick(position, feedPostList.get(position).getImageUrl());
             return true;
         }
     }
