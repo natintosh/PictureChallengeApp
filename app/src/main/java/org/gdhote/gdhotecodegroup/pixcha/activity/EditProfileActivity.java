@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -54,7 +55,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
     private FragmentManager mFragmentManager;
     private EditProfileViewModel profileViewModel;
 
-    private EditProfileFragment mEditProfileFragment;
+    int editProfileType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,18 +66,16 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
         profileViewModel.initialize();
 
         Intent intent = getIntent();
-        int editProfileType = intent.getIntExtra(EDIT_PROFILE_TYPE_INTENT_EXTRA, TYPE_EDIT_PROFILE);
+        editProfileType = intent.getIntExtra(EDIT_PROFILE_TYPE_INTENT_EXTRA, TYPE_EDIT_PROFILE);
 
         mFragmentManager = getSupportFragmentManager();
 
 
         switch (editProfileType) {
             case TYPE_UPDATE_PROFILE:
-                mEditProfileFragment = EditProfileFragment.newInstance(0);
                 loadFragment(EditProfileFragment.newInstance(0), false);
                 break;
             case TYPE_EDIT_PROFILE:
-                mEditProfileFragment = EditProfileFragment.newInstance(1);
                 loadFragment(EditProfileFragment.newInstance(1), false);
                 break;
             default:
@@ -90,6 +89,16 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
         return super.onSupportNavigateUp();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (editProfileType == TYPE_UPDATE_PROFILE) {
+            moveTaskToBack(true);
+            updateUserProfileOnBackPress();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void loadFragment(Fragment fragment, boolean addToBackStack) {
         // load fragment
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
@@ -100,6 +109,23 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
 
     }
 
+    private void updateUserProfileOnBackPress() {
+        FirebaseUser fireUser = FirebaseAuth.getInstance().getCurrentUser();
+        String documentId = fireUser.getUid();
+        FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
+        CollectionReference usersCollectionRef = firestoreDb.collection("users");
+        final DocumentReference userDocumentRef = usersCollectionRef.document(documentId);
+
+        User user = new User(profileViewModel.getId(), fireUser.getPhotoUrl().toString(), profileViewModel.getDisplayName(), profileViewModel.getEmailAddress(), profileViewModel.getBio());
+
+        CurrentUser currentUser = CurrentUser.getInstance();
+        currentUser.setId(user.getId());
+        currentUser.setDisplayName(user.getDisplayName());
+        currentUser.setEmailAddress(user.getEmailAddress());
+        currentUser.setBio(user.getBio());
+        currentUser.setProfileImageUrl(user.getProfileImageUrl());
+        userDocumentRef.set(user);
+    }
 
     @Override
     public void onSubmitButtonClick() {
@@ -177,7 +203,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(EditProfileActivity.this, "successfully written!", Toast.LENGTH_SHORT).show();
                                 closeProgressDialog();
-                                finish();
+                                closeActivity();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -188,6 +214,16 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
                     }
                 });
             }
+        }
+    }
+
+    private void closeActivity() {
+
+        if (editProfileType == TYPE_UPDATE_PROFILE) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else {
+            finish();
         }
     }
 

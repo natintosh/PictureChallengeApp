@@ -8,7 +8,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Source;
 
 import org.gdhote.gdhotecodegroup.pixcha.model.CurrentUser;
 import org.gdhote.gdhotecodegroup.pixcha.model.User;
@@ -26,9 +25,7 @@ public class UserHelper {
             CollectionReference usersCollectionRef = firestoreDb.collection("users");
             final DocumentReference userDocumentRef = usersCollectionRef.document(documentId);
 
-            Source source = Source.CACHE;
-
-            userDocumentRef.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            userDocumentRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {

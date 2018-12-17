@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +67,9 @@ public class ProfileFragment extends Fragment {
         return fragment;
     }
 
+    private LinearLayout mViewsLayout;
+    private ProgressBar mProgressViewLayout;
+
     private User user;
     private int fragmentType;
 
@@ -102,8 +107,16 @@ public class ProfileFragment extends Fragment {
             MainActivity.bottomNavigationView.getMenu().getItem(2).setChecked(true);
             MainActivity.activeFragment = this;
         }
-        final User user = getUser();
-        updateProfileView(user);
+
+        User user = getUser();
+        if (user.getDisplayName() == null || user.getDisplayName().isEmpty()) {
+            mViewsLayout.setVisibility(View.GONE);
+            mProgressViewLayout.setVisibility(View.VISIBLE);
+        } else {
+            mViewsLayout.setVisibility(View.VISIBLE);
+            mProgressViewLayout.setVisibility(View.GONE);
+            updateProfileView(user);
+        }
     }
 
     private User getUser() {
@@ -160,6 +173,8 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = getView() != null ? getView() : inflater.inflate(R.layout.fragment_profile, container, false);
+        mViewsLayout = view.findViewById(R.id.profile_details_views_layout);
+        mProgressViewLayout = view.findViewById(R.id.profile_detail_progress_bar);
         UserHelper.updateCurrentUser();
         if (fragmentType == 0) {
             setNavigationViewVisibility(true);
@@ -171,7 +186,14 @@ public class ProfileFragment extends Fragment {
 
         initialiseViewPager(view);
 
-        updateProfileView(getUser());
+        if (getUser().getDisplayName() == null || getUser().getDisplayName().isEmpty()) {
+            mViewsLayout.setVisibility(View.GONE);
+            mProgressViewLayout.setVisibility(View.VISIBLE);
+        } else {
+            mViewsLayout.setVisibility(View.VISIBLE);
+            mProgressViewLayout.setVisibility(View.GONE);
+            updateProfileView(getUser());
+        }
 
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override

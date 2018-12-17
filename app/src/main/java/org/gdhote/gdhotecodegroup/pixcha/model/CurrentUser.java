@@ -8,10 +8,17 @@ public class CurrentUser extends User {
     private String emailAddress;
     private String bio;
 
-    private static final CurrentUser ourInstance = new CurrentUser();
+    private static CurrentUser instance;
 
     public static synchronized CurrentUser getInstance() {
-        return ourInstance;
+        if (instance == null) {
+            instance = new CurrentUser();
+        }
+        return instance;
+    }
+
+    public static synchronized void resetInstance() {
+        instance = null;
     }
 
     private CurrentUser() {

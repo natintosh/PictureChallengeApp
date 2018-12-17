@@ -108,6 +108,13 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.On
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        finish();
+        startActivity(getIntent());
+    }
+
+    @Override
     public void onBackPressed() {
         int selectedNavItemId = bottomNavigationView.getSelectedItemId();
 
@@ -199,7 +206,6 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.On
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                makeToast("Successfully sign in");
                 FirebaseUserMetadata metadata = FirebaseAuth.getInstance().getCurrentUser().getMetadata();
 
                 if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
@@ -352,6 +358,7 @@ public class MainActivity extends AppCompatActivity implements SignInFragment.On
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        CurrentUser.resetInstance();
                         loadFragment(mSignInFragment, false);
                     }
                 });
