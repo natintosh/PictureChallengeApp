@@ -11,11 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -67,7 +67,7 @@ public class ProfileFragment extends Fragment {
         return fragment;
     }
 
-    private LinearLayout mViewsLayout;
+    private AppBarLayout mAppBar;
     private ProgressBar mProgressViewLayout;
 
     private User user;
@@ -110,10 +110,12 @@ public class ProfileFragment extends Fragment {
 
         User user = getUser();
         if (user.getDisplayName() == null || user.getDisplayName().isEmpty()) {
-            mViewsLayout.setVisibility(View.GONE);
+            mAppBar.setVisibility(View.GONE);
+            mProfileViewPager.setVisibility(View.GONE);
             mProgressViewLayout.setVisibility(View.VISIBLE);
         } else {
-            mViewsLayout.setVisibility(View.VISIBLE);
+            mAppBar.setVisibility(View.VISIBLE);
+            mProfileViewPager.setVisibility(View.VISIBLE);
             mProgressViewLayout.setVisibility(View.GONE);
             updateProfileView(user);
         }
@@ -173,7 +175,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = getView() != null ? getView() : inflater.inflate(R.layout.fragment_profile, container, false);
-        mViewsLayout = view.findViewById(R.id.profile_details_views_layout);
+        mAppBar = view.findViewById(R.id.app_bar_layout);
         mProgressViewLayout = view.findViewById(R.id.profile_detail_progress_bar);
         UserHelper.updateCurrentUser();
         if (fragmentType == 0) {
@@ -187,10 +189,12 @@ public class ProfileFragment extends Fragment {
         initialiseViewPager(view);
 
         if (getUser().getDisplayName() == null || getUser().getDisplayName().isEmpty()) {
-            mViewsLayout.setVisibility(View.GONE);
+            mAppBar.setVisibility(View.GONE);
+            mProfileViewPager.setVisibility(View.GONE);
             mProgressViewLayout.setVisibility(View.VISIBLE);
         } else {
-            mViewsLayout.setVisibility(View.VISIBLE);
+            mAppBar.setVisibility(View.VISIBLE);
+            mProfileViewPager.setVisibility(View.VISIBLE);
             mProgressViewLayout.setVisibility(View.GONE);
             updateProfileView(getUser());
         }
