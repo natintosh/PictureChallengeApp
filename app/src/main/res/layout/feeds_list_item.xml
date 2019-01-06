@@ -121,6 +121,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="10 MINUTES AGO" />
+
+        <ImageView
+            android:id="@+id/feed_see_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="?android:selectableItemBackground"
+            app:layout_constraintEnd_toEndOf="@+id/feed_like_check_box"
+            app:layout_constraintStart_toStartOf="@+id/feed_like_check_box"
+            app:layout_constraintTop_toBottomOf="@+id/feed_content_likes_text"
+            app:srcCompat="@drawable/ic_see" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

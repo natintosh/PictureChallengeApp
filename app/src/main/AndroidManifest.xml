@@ -69,7 +69,8 @@
         <activity
             android:name=".activity.ProfileActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.LikesActivity"></activity>
     </application>
 
 </manifest>

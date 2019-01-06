@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.DataSource;
@@ -56,37 +57,12 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
     private List<FeedPost> feedPostList;
     private SetFeedListItemCallback itemCallback;
 
-    public interface SetFeedListItemCallback {
-
-        void onSquareImageLongPress(String postId);
-
-        void onPopUpMenuPress(User user, FeedPost feedPost, ImageButton imageButton);
+    private void OnSeeLikeClickListner(String postId) {
+        if (itemCallback != null) itemCallback.onSeeLikeClickListener(postId);
     }
 
     private void OnSquareImageLongPress(String postId) {
         if (itemCallback != null) itemCallback.onSquareImageLongPress(postId);
-    }
-
-    private void OnPopUpMenuPress(User user, FeedPost feedPost, ImageButton imageButton) {
-        if (itemCallback != null) itemCallback.onPopUpMenuPress(user, feedPost, imageButton);
-    }
-
-    public FeedsListAdapter(Context context, SetFeedListItemCallback callback) {
-        feedPostList = new ArrayList<>();
-        this.context = context;
-        this.itemCallback = callback;
-    }
-
-    public void setDataSet(List<FeedPost> dataSet) {
-        feedPostList = dataSet;
-        notifyDataSetChanged();
-    }
-
-    @NonNull
-    @Override
-    public FeedsListAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.feeds_list_item, parent, false);
-        return new FeedsListAdapterViewHolder(view);
     }
 
     @Override
@@ -245,6 +221,44 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
                 OnPopUpMenuPress(user[0], post, holder.popupButton);
             }
         });
+
+        holder.seeLikes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OnSeeLikeClickListner(post.getId());
+            }
+        });
+    }
+
+    private void OnPopUpMenuPress(User user, FeedPost feedPost, ImageButton imageButton) {
+        if (itemCallback != null) itemCallback.onPopUpMenuPress(user, feedPost, imageButton);
+    }
+
+    public FeedsListAdapter(Context context, SetFeedListItemCallback callback) {
+        feedPostList = new ArrayList<>();
+        this.context = context;
+        this.itemCallback = callback;
+    }
+
+    public void setDataSet(List<FeedPost> dataSet) {
+        feedPostList = dataSet;
+        notifyDataSetChanged();
+    }
+
+    @NonNull
+    @Override
+    public FeedsListAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.feeds_list_item, parent, false);
+        return new FeedsListAdapterViewHolder(view);
+    }
+
+    public interface SetFeedListItemCallback {
+
+        void onSquareImageLongPress(String postId);
+
+        void onSeeLikeClickListener(String postId);
+
+        void onPopUpMenuPress(User user, FeedPost feedPost, ImageButton imageButton);
     }
 
     @Override
@@ -264,6 +278,7 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
         private TextView timeText;
         private TextView commentText;
         private View contentBg;
+        private ImageView seeLikes;
         private ImageButton popupButton;
 
 
@@ -280,6 +295,7 @@ public class FeedsListAdapter extends RecyclerView.Adapter<FeedsListAdapter.Feed
             commentText = itemView.findViewById(R.id.feed_comment_text);
             contentBg = itemView.findViewById(R.id.feed_content_background);
             popupButton = itemView.findViewById(R.id.feed_popup_menu_btn);
+            seeLikes = itemView.findViewById(R.id.feed_see_likes);
         }
     }
 }

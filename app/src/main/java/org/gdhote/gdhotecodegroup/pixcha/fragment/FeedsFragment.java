@@ -3,6 +3,7 @@ package org.gdhote.gdhotecodegroup.pixcha.fragment;
 import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -39,6 +40,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import org.gdhote.gdhotecodegroup.pixcha.R;
+import org.gdhote.gdhotecodegroup.pixcha.activity.LikesActivity;
 import org.gdhote.gdhotecodegroup.pixcha.activity.MainActivity;
 import org.gdhote.gdhotecodegroup.pixcha.adapter.CommentListAdapter;
 import org.gdhote.gdhotecodegroup.pixcha.adapter.FeedsListAdapter;
@@ -270,6 +272,14 @@ public class FeedsFragment extends Fragment implements FeedsListAdapter.SetFeedL
         layoutParams.height = dialogWindowHeight;
 
         dialogBuilder.getWindow().setAttributes(layoutParams);
+    }
+
+    @Override
+    public void onSeeLikeClickListener(String postId) {
+
+        Intent intent = new Intent(getContext(), LikesActivity.class);
+        intent.putExtra(LikesActivity.POST_ID_INTENT_EXTRA, postId);
+        startActivity(intent);
     }
 
     @Override

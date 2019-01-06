@@ -1,9 +1,9 @@
 package org.gdhote.gdhotecodegroup.pixcha.fragment;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +34,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import org.gdhote.gdhotecodegroup.pixcha.R;
+import org.gdhote.gdhotecodegroup.pixcha.activity.LikesActivity;
 import org.gdhote.gdhotecodegroup.pixcha.adapter.CommentListAdapter;
 import org.gdhote.gdhotecodegroup.pixcha.adapter.ProfileListAdapter;
 import org.gdhote.gdhotecodegroup.pixcha.model.Comment;
@@ -182,6 +183,14 @@ public class ProfileImageListFragment extends Fragment implements ProfileListAda
         layoutParams.height = dialogWindowHeight;
 
         dialogBuilder.getWindow().setAttributes(layoutParams);
+    }
+
+    @Override
+    public void onSeeLikeClickListener(String postId) {
+
+        Intent intent = new Intent(getContext(), LikesActivity.class);
+        intent.putExtra(LikesActivity.POST_ID_INTENT_EXTRA, postId);
+        startActivity(intent);
     }
 
     @Override
